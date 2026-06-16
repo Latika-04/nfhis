@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NFHIS — National Federated Healthcare Intelligence System</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --bg: #050a14; --bg2: #080f1e; --bg3: rgba(8,20,40,.8);
+    --cyan: #00d4ff; --green: #00ff87; --pink: #ff4d8d; --yellow: #ffd700;
+    --red: #ff3b5c; --orange: #ff7a2e; --amber: #ffc93c; --purple: #a78bfa;
+    --text: #e8f4fd; --text2: #7aa8c7; --muted: #4a6a85;
+    --border: rgba(0,212,255,.12); --border2: rgba(255,255,255,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+  .bg-grid{background-image:linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);background-size:40px 40px}
+  .glow-bg{background:radial-gradient(ellipse at 50% 0%,rgba(0,212,255,.12) 0%,transparent 60%)}
+
+  /* Layout */
+  .app{display:flex;min-height:100vh}
+  .sidebar{width:260px;flex-shrink:0;position:fixed;top:0;left:0;height:100%;background:rgba(4,10,22,.97);border-right:1px solid rgba(255,255,255,.05);backdrop-filter:blur(30px);z-index:50;display:flex;flex-direction:column}
+  .main{margin-left:260px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+  .topbar{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(4,10,22,.9);border-bottom:1px solid rgba(255,255,255,.05);backdrop-filter:blur(20px);position:sticky;top:0;z-index:40}
+  .content{flex:1;padding:24px;position:relative}
+
+  /* Sidebar */
+  .logo{padding:20px 20px 12px;display:flex;align-items:center;gap:10px}
+  .logo-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;background:rgba(0,212,255,.15);border:1px solid rgba(0,212,255,.35);color:var(--cyan);font-family:'Syne',sans-serif}
+  .logo-text{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:white}
+  .logo-sub{font-size:10px;color:var(--cyan);font-weight:600}
+  .user-card{margin:8px 12px 4px;padding:10px 12px;border-radius:12px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15)}
+  .user-avatar{width:28px;height:28px;border-radius:8px;background:rgba(0,212,255,.2);border:1px solid rgba(0,212,255,.3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--cyan)}
+  .nav-section{padding:16px 12px 0;flex:1;overflow-y:auto}
+  .nav-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);padding:0 8px;margin-bottom:6px}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);transition:all .2s;margin-bottom:2px;border:1px solid transparent;position:relative}
+  .nav-item:hover{background:rgba(0,212,255,.07);color:var(--cyan)}
+  .nav-item.active{background:rgba(0,212,255,.11);color:var(--cyan);border-color:rgba(0,212,255,.2)}
+  .nav-badge{margin-left:auto;font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px;background:rgba(255,59,92,.2);color:#ff3b5c;border:1px solid rgba(255,59,92,.3)}
+  .sidebar-bottom{padding:12px;border-top:1px solid rgba(255,255,255,.05);margin-top:auto}
+  .online-dot{width:6px;height:6px;border-radius:50%;background:#00e676;animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  /* Glass card */
+  .card{background:rgba(8,20,40,.8);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.04)}
+  .card:hover{border-color:rgba(0,212,255,.22);box-shadow:0 12px 40px rgba(0,0,0,.45),0 0 20px rgba(0,212,255,.05)}
+  .card-p{padding:20px}
+  .card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:white;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+
+  /* Stats grid */
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+  .stat-card{background:rgba(8,20,40,.8);border:1px solid var(--border);border-radius:16px;padding:18px;transition:all .3s;cursor:default}
+  .stat-card:hover{transform:translateY(-2px);border-color:rgba(0,212,255,.25);box-shadow:0 8px 24px rgba(0,212,255,.08)}
+  .stat-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:14px}
+  .stat-value{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;line-height:1}
+  .stat-label{font-size:12px;font-weight:500;color:white;margin-top:2px}
+  .stat-sub{font-size:11px;color:var(--muted);margin-top:3px}
+  .trend-up{font-size:11px;font-weight:700;padding:2px 7px;border-radius:8px;background:rgba(0,230,118,.12);color:#00e676;border:1px solid rgba(0,230,118,.2)}
+  .trend-down{font-size:11px;font-weight:700;padding:2px 7px;border-radius:8px;background:rgba(255,59,92,.12);color:#ff3b5c;border:1px solid rgba(255,59,92,.2)}
+
+  /* Badges */
+  .badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+  .badge-critical{background:rgba(255,59,92,.15);color:#ff3b5c;border:1px solid rgba(255,59,92,.3)}
+  .badge-high{background:rgba(255,122,46,.15);color:#ff7a2e;border:1px solid rgba(255,122,46,.3)}
+  .badge-medium{background:rgba(255,201,60,.15);color:#ffc93c;border:1px solid rgba(255,201,60,.3)}
+  .badge-low{background:rgba(0,230,118,.1);color:#00e676;border:1px solid rgba(0,230,118,.25)}
+  .badge-info{background:rgba(0,212,255,.1);color:#00d4ff;border:1px solid rgba(0,212,255,.25)}
+
+  /* Tables */
+  .data-table{width:100%;border-collapse:collapse}
+  .data-table th{padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.05)}
+  .data-table td{padding:11px 14px;font-size:12px;color:var(--text2);border-bottom:1px solid rgba(255,255,255,.03);transition:background .15s}
+  .data-table tr:hover td{background:rgba(0,212,255,.03);color:var(--text)}
+  .data-table tr:last-child td{border-bottom:none}
+
+  /* Risk meter (SVG circles) */
+  .risk-meter-wrap{display:flex;flex-direction:column;align-items:center}
+  .risk-circle{transform:rotate(-90deg)}
+  .risk-bg{fill:none;stroke:rgba(255,255,255,.06);stroke-width:8}
+  .risk-fg{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.5s ease}
+  .risk-val{text-anchor:middle;dominant-baseline:middle;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:18px}
+
+  /* SHAP bars */
+  .shap-bar-wrap{margin-bottom:10px}
+  .shap-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .shap-label{font-size:11px;color:var(--text2);width:160px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .shap-bar-outer{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.05);overflow:hidden}
+  .shap-bar-inner{height:100%;border-radius:3px;transition:width 1s ease}
+  .shap-val{font-size:10px;font-family:'JetBrains Mono',monospace;width:40px;text-align:right;flex-shrink:0}
+
+  /* Alert cards */
+  .alert-card{border-radius:14px;padding:14px 16px;margin-bottom:10px;transition:all .2s}
+  .alert-critical{background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.25)}
+  .alert-high{background:rgba(255,122,46,.08);border:1px solid rgba(255,122,46,.25)}
+  .alert-medium{background:rgba(255,201,60,.07);border:1px solid rgba(255,201,60,.2)}
+  .alert-pulse{animation:alertPulse 2s ease-in-out infinite}
+  @keyframes alertPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,59,92,.3)}50%{box-shadow:0 0 0 8px rgba(255,59,92,0)}}
+
+  /* Buttons */
+  .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none;font-family:'DM Sans',sans-serif}
+  .btn-primary{background:linear-gradient(135deg,#0ea5e9,#0284c7);color:white;border:1px solid rgba(0,212,255,.3);box-shadow:0 4px 15px rgba(0,212,255,.2)}
+  .btn-primary:hover{box-shadow:0 6px 25px rgba(0,212,255,.4);transform:translateY(-1px)}
+  .btn-ghost{background:transparent;color:var(--text2);border:1px solid rgba(255,255,255,.08)}
+  .btn-ghost:hover{background:rgba(0,212,255,.07);color:var(--cyan);border-color:rgba(0,212,255,.2)}
+  .btn-danger{background:rgba(255,59,92,.15);color:#ff3b5c;border:1px solid rgba(255,59,92,.3)}
+  .btn-danger:hover{background:rgba(255,59,92,.25)}
+
+  /* Input */
+  .inp{width:100%;padding:9px 14px;border-radius:10px;background:rgba(8,20,40,.85);border:1px solid rgba(255,255,255,.08);color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:all .2s}
+  .inp:focus{border-color:rgba(0,212,255,.4);box-shadow:0 0 0 3px rgba(0,212,255,.07)}
+  .inp::placeholder{color:var(--muted)}
+  select.inp option{background:#0a1628;color:var(--text)}
+
+  /* Tabs */
+  .tabs{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+  .tab{padding:7px 16px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;border:1px solid rgba(255,255,255,.07);color:var(--text2);background:transparent}
+  .tab:hover{color:var(--cyan);border-color:rgba(0,212,255,.2);background:rgba(0,212,255,.06)}
+  .tab.active{background:rgba(0,212,255,.12);color:var(--cyan);border-color:rgba(0,212,255,.25)}
+
+  /* Pages */
+  .page{display:none;animation:fadeUp .4s ease forwards}
+  .page.active{display:block}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+  /* Live vitals sparkline canvas */
+  .sparkline{width:100%;height:60px}
+
+  /* Section header */
+  .section-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px}
+  .section-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:white}
+  .section-sub{font-size:13px;color:var(--text2);margin-top:2px}
+
+  /* Two-col layout */
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+  .col-span-2{grid-column:span 2}
+
+  /* Trust bar */
+  .trust-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+  .trust-bar-outer{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.05)}
+  .trust-bar-fill{height:100%;border-radius:3px;transition:width 1.2s ease}
+
+  /* FL architecture */
+  .fl-tier{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 0}
+  .fl-node{padding:10px 20px;border-radius:14px;text-align:center;font-size:12px;font-weight:600}
+  .fl-line{width:1px;height:24px;background:rgba(0,212,255,.3);margin:0 auto}
+  .fl-row{display:flex;gap:16px;justify-content:center}
+
+  /* Scrollbar */
+  ::-webkit-scrollbar{width:3px;height:3px}
+  ::-webkit-scrollbar-track{background:rgba(0,0,0,.15)}
+  ::-webkit-scrollbar-thumb{background:rgba(0,212,255,.25);border-radius:2px}
+
+  /* Neon text */
+  .neon-cyan{color:var(--cyan);text-shadow:0 0 12px rgba(0,212,255,.7)}
+  .neon-green{color:var(--green);text-shadow:0 0 12px rgba(0,255,135,.7)}
+  .font-mono{font-family:'JetBrains Mono',monospace}
+  .font-display{font-family:'Syne',sans-serif}
+
+  /* Role color mapping */
+  .role-doctor{--rc:var(--cyan)}
+  .role-nurse{--rc:var(--green)}
+  .role-head{--rc:var(--purple)}
+  .role-admin{--rc:var(--yellow)}
+</style>
+</head>
+<body class="bg-grid">
+<div class="absolute inset-0 glow-bg" style="position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 0%,rgba(0,212,255,.1) 0%,transparent 60%);z-index:0"></div>
+
+<!-- ═══════════════════════════════════ LOGIN PAGE ═══════════════════════════════════ -->
+<div id="loginPage" style="min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;z-index:10;padding:24px">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:900px;width:100%;align-items:center">
+    <!-- Branding -->
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px">
+        <div style="width:42px;height:42px;border-radius:12px;background:rgba(0,212,255,.15);border:1px solid rgba(0,212,255,.3);display:flex;align-items:center;justify-content:center;font-size:22px">🏥</div>
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:.15em;text-transform:uppercase">Government of India</div>
+          <div style="font-size:10px;color:var(--muted)">Ministry of Health & Family Welfare</div>
+        </div>
+      </div>
+      <h1 class="font-display" style="font-size:38px;font-weight:800;line-height:1.15;color:white;margin-bottom:14px">
+        National Federated<br><span class="neon-cyan">Healthcare Intelligence</span><br>System
+      </h1>
+      <p style="color:rgba(122,168,199,.65);font-size:13px;line-height:1.7;max-width:380px">
+        AI-powered federated learning platform connecting hospitals across India for real-time disease prediction, patient safety monitoring, and medical analytics.
+      </p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:28px">
+        <div class="card card-p" style="padding:14px 16px">
+          <div style="font-size:20px;margin-bottom:4px">🏥</div>
+          <div class="font-display neon-cyan" style="font-size:20px;font-weight:800">4</div>
+          <div style="font-size:11px;color:var(--muted)">Hospitals Connected</div>
+        </div>
+        <div class="card card-p" style="padding:14px 16px">
+          <div style="font-size:20px;margin-bottom:4px">🔄</div>
+          <div class="font-display neon-cyan" style="font-size:20px;font-weight:800">15</div>
+          <div style="font-size:11px;color:var(--muted)">FL Rounds Completed</div>
+        </div>
+        <div class="card card-p" style="padding:14px 16px">
+          <div style="font-size:20px;margin-bottom:4px">👥</div>
+          <div class="font-display neon-cyan" style="font-size:20px;font-weight:800">3,600</div>
+          <div style="font-size:11px;color:var(--muted)">Patients Monitored</div>
+        </div>
+        <div class="card card-p" style="padding:14px 16px">
+          <div style="font-size:20px;margin-bottom:4px">🎯</div>
+          <div class="font-display neon-green" style="font-size:20px;font-weight:800">88.4%</div>
+          <div style="font-size:11px;color:var(--muted)">Model Accuracy</div>
+        </div>
+      </div>
+    </div>
+    <!-- Login form -->
+    <div class="card" style="padding:32px">
+      <h2 class="font-display" style="font-size:22px;font-weight:700;color:white;margin-bottom:6px">Secure Sign In</h2>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:24px">Access your healthcare dashboard</p>
+      <div id="loginError" style="display:none;padding:10px 14px;border-radius:10px;background:rgba(255,59,92,.1);border:1px solid rgba(255,59,92,.25);color:#ff6b8a;font-size:13px;margin-bottom:14px"></div>
+      <div style="margin-bottom:14px">
+        <label style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text2);margin-bottom:6px">Username</label>
+        <input id="loginUser" class="inp" placeholder="Enter username" value="doctor1"/>
+      </div>
+      <div style="margin-bottom:18px">
+        <label style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text2);margin-bottom:6px">Password</label>
+        <input id="loginPass" class="inp" type="password" placeholder="Enter password" value="doctor123"/>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doLogin()">Sign In →</button>
+      <div style="margin-top:24px">
+        <p style="font-size:10px;text-align:center;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px">Quick Demo Access</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <button onclick="quickLogin('doctor1','doctor123','doctor')" style="padding:10px 12px;border-radius:12px;background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.2);cursor:pointer;text-align:left;transition:all .2s" onmouseover="this.style.background='rgba(0,212,255,.12)'" onmouseout="this.style.background='rgba(0,212,255,.07)'">
+            <div style="font-size:16px;margin-bottom:2px">🩺</div>
+            <div style="font-size:11px;font-weight:700;color:var(--cyan)">Doctor</div>
+            <div style="font-size:10px;color:rgba(0,212,255,.5)">doctor1</div>
+          </button>
+          <button onclick="quickLogin('nurse1','nurse123','nurse')" style="padding:10px 12px;border-radius:12px;background:rgba(0,255,135,.07);border:1px solid rgba(0,255,135,.2);cursor:pointer;text-align:left;transition:all .2s" onmouseover="this.style.background='rgba(0,255,135,.12)'" onmouseout="this.style.background='rgba(0,255,135,.07)'">
+            <div style="font-size:16px;margin-bottom:2px">💉</div>
+            <div style="font-size:11px;font-weight:700;color:var(--green)">Nurse</div>
+            <div style="font-size:10px;color:rgba(0,255,135,.5)">nurse1</div>
+          </button>
+          <button onclick="quickLogin('head1','head123','head_doctor')" style="padding:10px 12px;border-radius:12px;background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);cursor:pointer;text-align:left;transition:all .2s" onmouseover="this.style.background='rgba(167,139,250,.12)'" onmouseout="this.style.background='rgba(167,139,250,.07)'">
+            <div style="font-size:16px;margin-bottom:2px">👨‍⚕️</div>
+            <div style="font-size:11px;font-weight:700;color:var(--purple)">Head Doctor</div>
+            <div style="font-size:10px;color:rgba(167,139,250,.5)">head1</div>
+          </button>
+          <button onclick="quickLogin('admin1','admin123','admin')" style="padding:10px 12px;border-radius:12px;background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.2);cursor:pointer;text-align:left;transition:all .2s" onmouseover="this.style.background='rgba(255,215,0,.12)'" onmouseout="this.style.background='rgba(255,215,0,.07)'">
+            <div style="font-size:16px;margin-bottom:2px">⚙️</div>
+            <div style="font-size:11px;font-weight:700;color:var(--yellow)">Admin</div>
+            <div style="font-size:10px;color:rgba(255,215,0,.5)">admin1</div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ MAIN APP ═══════════════════════════════════ -->
+<div id="mainApp" class="app" style="display:none;position:relative;z-index:10">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">N</div>
+      <div>
+        <div class="logo-text">NFHIS</div>
+        <div id="roleLabel" class="logo-sub">Doctor Portal</div>
+      </div>
+    </div>
+    <div class="user-card">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="user-avatar" id="userAvatar">D</div>
+        <div style="min-width:0">
+          <div style="font-size:12px;font-weight:600;color:white;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="userName">Dr. Priya Nair</div>
+          <div style="font-size:10px;color:rgba(0,212,255,.6);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="userHospital">Apollo Private Hospital</div>
+        </div>
+      </div>
+    </div>
+    <nav class="nav-section" id="sidebarNav"></nav>
+    <div class="sidebar-bottom">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div class="online-dot"></div>
+          <span style="font-size:11px;color:#00e676">System Online</span>
+        </div>
+        <span style="font-size:10px;color:var(--muted)">v1.0.0</span>
+      </div>
+      <button class="btn btn-ghost" style="width:100%;justify-content:center;font-size:12px;padding:7px" onclick="doLogout()">Sign Out →</button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <div style="font-size:10px;color:rgba(0,212,255,.4);text-transform:uppercase;letter-spacing:.15em">NFHIS Portal</div>
+        <div style="font-size:13px;font-weight:600;color:white;margin-top:1px">Welcome back, <span id="topbarName" style="color:var(--cyan)">Dr. Priya Nair</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="display:flex;align-items:center;gap:7px;padding:6px 12px;border-radius:10px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.12)">
+          <div style="width:6px;height:6px;border-radius:50%;background:#00e676;animation:pulse 2s infinite"></div>
+          <span id="liveTime" class="font-mono" style="font-size:12px;color:rgba(122,168,199,.9)">00:00:00</span>
+        </div>
+        <div style="position:relative">
+          <button onclick="toggleAlertDropdown()" style="width:34px;height:34px;border-radius:10px;background:rgba(255,59,92,.1);border:1px solid rgba(255,59,92,.25);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;position:relative">
+            🔔
+            <span style="position:absolute;top:-3px;right:-3px;width:16px;height:16px;border-radius:50%;background:#ff3b5c;font-size:9px;font-weight:700;color:white;display:flex;align-items:center;justify-content:center">3</span>
+          </button>
+          <div id="alertDropdown" style="display:none;position:absolute;right:0;top:44px;width:300px;background:rgba(4,10,24,.98);border:1px solid rgba(0,212,255,.15);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.6);z-index:100;overflow:hidden">
+            <div style="padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between">
+              <span style="font-size:13px;font-weight:600;color:white">Active Alerts</span>
+              <span class="badge badge-critical">3 pending</span>
+            </div>
+            <div style="max-height:220px;overflow-y:auto">
+              <div style="padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer" onmouseover="this.style.background='rgba(0,212,255,.04)'" onmouseout="this.style.background='transparent'">
+                <div style="display:flex;align-items:start;gap:10px">
+                  <div style="width:7px;height:7px;border-radius:50%;background:#ff3b5c;margin-top:5px;flex-shrink:0;box-shadow:0 0 8px rgba(255,59,92,.6)"></div>
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:white">Rajesh Kumar</div>
+                    <div style="font-size:11px;color:var(--muted);margin-top:2px">Critical cardiac risk: 91.5%</div>
+                  </div>
+                  <span class="badge badge-critical" style="margin-left:auto;flex-shrink:0">critical</span>
+                </div>
+              </div>
+              <div style="padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer" onmouseover="this.style.background='rgba(0,212,255,.04)'" onmouseout="this.style.background='transparent'">
+                <div style="display:flex;align-items:start;gap:10px">
+                  <div style="width:7px;height:7px;border-radius:50%;background:#ff7a2e;margin-top:5px;flex-shrink:0"></div>
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:white">Arjun Sharma</div>
+                    <div style="font-size:11px;color:var(--muted);margin-top:2px">Glucose 165 mg/dL — Diabetes 78.5%</div>
+                  </div>
+                  <span class="badge badge-high" style="margin-left:auto;flex-shrink:0">high</span>
+                </div>
+              </div>
+              <div style="padding:12px 16px;cursor:pointer" onmouseover="this.style.background='rgba(0,212,255,.04)'" onmouseout="this.style.background='transparent'">
+                <div style="display:flex;align-items:start;gap:10px">
+                  <div style="width:7px;height:7px;border-radius:50%;background:#ff7a2e;margin-top:5px;flex-shrink:0"></div>
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:white">Mohammed Khan</div>
+                    <div style="font-size:11px;color:var(--muted);margin-top:2px">SGPT=145, Liver risk: 79.4%</div>
+                  </div>
+                  <span class="badge badge-high" style="margin-left:auto;flex-shrink:0">high</span>
+                </div>
+              </div>
+            </div>
+            <div style="padding:10px 16px;text-align:center">
+              <a href="#" onclick="switchPage('alerts');toggleAlertDropdown();return false" style="font-size:12px;color:var(--cyan);text-decoration:none">View all alerts →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <!-- ─── DOCTOR DASHBOARD ─── -->
+      <div id="page-dashboard" class="page active">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Doctor Dashboard</div>
+            <div class="section-sub" id="dashboardSub">Dr. Priya Nair · Apollo Private Hospital</div>
+          </div>
+          <button class="btn btn-primary" onclick="switchPage('predict')">🔬 Run Prediction</button>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(0,212,255,.12);border:1px solid rgba(0,212,255,.2)">👥</div><div class="stat-value" style="color:var(--cyan)">342</div><div class="stat-label">My Patients</div><div style="margin-top:6px"><span class="trend-up">↑ 5%</span></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(255,59,92,.12);border:1px solid rgba(255,59,92,.2)">🔔</div><div class="stat-value" style="color:#ff3b5c">3</div><div class="stat-label">Active Alerts</div><div style="margin-top:6px"><span class="badge badge-critical">critical</span></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(255,201,60,.12);border:1px solid rgba(255,201,60,.2)">🩸</div><div class="stat-value" style="color:var(--amber)">26.4%</div><div class="stat-label">Avg Diabetes Risk</div><div class="stat-sub">Apollo Hospital</div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(255,59,92,.12);border:1px solid rgba(255,59,92,.2)">❤️</div><div class="stat-value" style="color:#ff3b5c">52.4%</div><div class="stat-label">Avg Heart Risk</div><div class="stat-sub">Apollo Hospital</div></div>
+        </div>
+        <div class="grid-2" style="margin-bottom:20px">
+          <div class="card card-p">
+            <div class="card-title">🔔 Active Alerts</div>
+            <div class="alert-card alert-critical alert-pulse">
+              <div style="display:flex;align-items:start;justify-content:space-between;gap:10px">
+                <div><div style="display:flex;gap:6px;margin-bottom:6px"><span class="badge badge-critical">CRITICAL</span></div><div style="font-size:13px;font-weight:600;color:white">Rajesh Kumar · PAT000003</div><div style="font-size:11px;color:var(--text2);margin-top:4px;line-height:1.5">Cardiac risk 91.5% — Cholesterol 265, BP 162/105. Immediate cardiology referral required.</div></div>
+                <button class="btn btn-danger" style="font-size:11px;padding:6px 12px;flex-shrink:0">ACK</button>
+              </div>
+            </div>
+            <div class="alert-card alert-high">
+              <div style="display:flex;align-items:start;justify-content:space-between;gap:10px">
+                <div><div style="display:flex;gap:6px;margin-bottom:6px"><span class="badge badge-high">HIGH</span></div><div style="font-size:13px;font-weight:600;color:white">Arjun Sharma · PAT000001</div><div style="font-size:11px;color:var(--text2);margin-top:4px;line-height:1.5">Fasting glucose 165 mg/dL, HbA1c 7.2%. Diabetes risk: 78.5%</div></div>
+                <button class="btn btn-ghost" style="font-size:11px;padding:6px 12px;flex-shrink:0">ACK</button>
+              </div>
+            </div>
+            <div class="alert-card" style="background:rgba(255,201,60,.06);border:1px solid rgba(255,201,60,.2)">
+              <div style="display:flex;align-items:start;justify-content:space-between;gap:10px">
+                <div><div style="display:flex;gap:6px;margin-bottom:6px"><span class="badge badge-medium">MEDIUM</span></div><div style="font-size:13px;font-weight:600;color:white">Rekha Singh · PAT000006</div><div style="font-size:11px;color:var(--text2);margin-top:4px">Pre-diabetes: Glucose 132, HbA1c 6.4%</div></div>
+                <button class="btn btn-ghost" style="font-size:11px;padding:6px 12px;flex-shrink:0">ACK</button>
+              </div>
+            </div>
+          </div>
+          <div class="card card-p">
+            <div class="card-title">📈 Disease Trends (12 months)</div>
+            <canvas id="trendChart" style="max-height:220px"></canvas>
+            <div style="display:flex;gap:16px;margin-top:10px">
+              <div style="display:flex;align-items:center;gap:5px"><div style="width:8px;height:8px;border-radius:2px;background:var(--cyan)"></div><span style="font-size:10px;color:var(--muted)">Diabetes</span></div>
+              <div style="display:flex;align-items:center;gap:5px"><div style="width:8px;height:8px;border-radius:2px;background:#ff3b5c"></div><span style="font-size:10px;color:var(--muted)">Heart Disease</span></div>
+              <div style="display:flex;align-items:center;gap:5px"><div style="width:8px;height:8px;border-radius:2px;background:var(--amber)"></div><span style="font-size:10px;color:var(--muted)">Liver Disease</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-p">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div class="card-title" style="margin-bottom:0">Recent Patients</div>
+            <button class="btn btn-ghost" style="font-size:12px;padding:6px 14px">View All →</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="data-table">
+              <thead><tr><th>Patient</th><th>Age/Gender</th><th>Glucose (mg/dL)</th><th>BP (mmHg)</th><th>Cholesterol</th><th>Risk</th><th>Score</th><th>Action</th></tr></thead>
+              <tbody id="patientTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── PREDICTION PAGE ─── -->
+      <div id="page-predict" class="page">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Disease Risk Prediction</div>
+            <div class="section-sub">AI-powered risk assessment with SHAP explainability</div>
+          </div>
+          <select id="hospitalSelect" class="inp" style="width:auto;min-width:220px">
+            <option>Apollo_Private_Hospital</option>
+            <option>AIIMS_Government_Hospital</option>
+            <option>Fortis_National_Hospital</option>
+            <option>District_Rural_Hospital</option>
+          </select>
+        </div>
+        <div class="grid-3" style="margin-bottom:20px">
+          <!-- Demographics -->
+          <div class="card card-p">
+            <div class="card-title">👤 Demographics</div>
+            <div style="display:grid;gap:10px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">Age</label><input class="inp" id="p_age" value="52" type="number" style="padding:7px 10px;font-size:12px"/></div>
+                <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">Gender</label><select class="inp" id="p_gender" style="padding:7px 10px;font-size:12px"><option>Male</option><option>Female</option></select></div>
+              </div>
+              <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">BMI</label><input class="inp" id="p_bmi" value="28.5" type="number" step="0.1" style="padding:7px 10px;font-size:12px"/></div>
+              <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">Exercise Level</label><select class="inp" id="p_exercise" style="padding:7px 10px;font-size:12px"><option>None</option><option selected>Light</option><option>Moderate</option><option>Heavy</option></select></div>
+              <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">Smoking</label><select class="inp" id="p_smoking" style="padding:7px 10px;font-size:12px"><option>Never</option><option selected>Former</option><option>Current</option></select></div>
+              <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">Alcohol</label><select class="inp" id="p_alcohol" style="padding:7px 10px;font-size:12px"><option>Never</option><option selected>Occasional</option><option>Regular</option><option>Heavy</option></select></div>
+            </div>
+          </div>
+          <!-- Vitals & Labs -->
+          <div class="card card-p">
+            <div class="card-title">💓 Vitals & Glucose</div>
+            <div style="display:grid;gap:10px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">Systolic BP</label><input class="inp" id="p_sbp" value="145" type="number" style="padding:7px 10px;font-size:12px"/></div>
+                <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">Diastolic BP</label><input class="inp" id="p_dbp" value="92" type="number" style="padding:7px 10px;font-size:12px"/></div>
+              </div>
+              <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">Fasting Glucose (mg/dL)</label><input class="inp" id="p_glucose" value="165" type="number" style="padding:7px 10px;font-size:12px"/></div>
+              <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">HbA1c (%)</label><input class="inp" id="p_hba1c" value="7.2" type="number" step="0.1" style="padding:7px 10px;font-size:12px"/></div>
+              <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">Total Cholesterol</label><input class="inp" id="p_chol" value="220" type="number" style="padding:7px 10px;font-size:12px"/></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">LDL</label><input class="inp" id="p_ldl" value="145" type="number" style="padding:7px 10px;font-size:12px"/></div>
+                <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">HDL</label><input class="inp" id="p_hdl" value="38" type="number" style="padding:7px 10px;font-size:12px"/></div>
+              </div>
+            </div>
+          </div>
+          <!-- Liver + History -->
+          <div class="card card-p">
+            <div class="card-title">🫀 Liver & History</div>
+            <div style="display:grid;gap:10px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">SGPT (U/L)</label><input class="inp" id="p_sgpt" value="45" type="number" style="padding:7px 10px;font-size:12px"/></div>
+                <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">SGOT (U/L)</label><input class="inp" id="p_sgot" value="38" type="number" style="padding:7px 10px;font-size:12px"/></div>
+              </div>
+              <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">Bilirubin Total</label><input class="inp" id="p_bili" value="0.9" type="number" step="0.01" style="padding:7px 10px;font-size:12px"/></div>
+              <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">Family Hx — Diabetes</label><select class="inp" id="p_fhd" style="padding:7px 10px;font-size:12px"><option value="0">No</option><option value="1" selected>Yes</option></select></div>
+              <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">Family Hx — Heart</label><select class="inp" id="p_fhh" style="padding:7px 10px;font-size:12px"><option value="0">No</option><option value="1" selected>Yes</option></select></div>
+              <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">Family Hx — Liver</label><select class="inp" id="p_fhl" style="padding:7px 10px;font-size:12px"><option value="0" selected>No</option><option value="1">Yes</option></select></div>
+              <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:4px" onclick="runPrediction()">🔬 Analyze Risk</button>
+            </div>
+          </div>
+        </div>
+        <!-- Results -->
+        <div id="predResults" style="display:none">
+          <div id="overallBanner" style="border-radius:18px;padding:18px 22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between"></div>
+          <div class="grid-3" style="margin-bottom:20px" id="riskMeters"></div>
+          <div class="card card-p">
+            <div class="card-title">🧠 SHAP Feature Importance (Global)</div>
+            <div class="tabs" id="shapTabs"></div>
+            <div id="shapBars"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── ALERTS PAGE ─── -->
+      <div id="page-alerts" class="page">
+        <div class="section-header">
+          <div><div class="section-title">Patient Alerts</div><div class="section-sub">3 pending · 1 negligence flag</div></div>
+        </div>
+        <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(255,59,92,.1);border:1px solid rgba(255,59,92,.2)">🚨</div><div class="stat-value" style="color:#ff3b5c">1</div><div class="stat-label">Critical Alerts</div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(255,122,46,.1);border:1px solid rgba(255,122,46,.2)">⚠️</div><div class="stat-value" style="color:var(--orange)">2</div><div class="stat-label">High Alerts</div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.2)">⚠️</div><div class="stat-value" style="color:var(--yellow)">1</div><div class="stat-label">Negligence Flags</div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.2)">✓</div><div class="stat-value" style="color:#00e676">2</div><div class="stat-label">Acknowledged</div></div>
+        </div>
+        <div class="card card-p">
+          <div class="card-title">All Patient Alerts</div>
+          <div class="alert-card alert-critical alert-pulse">
+            <div style="display:flex;align-items:start;justify-content:space-between;gap:12px"><div><div style="display:flex;gap:6px;margin-bottom:8px"><span class="badge badge-critical">CRITICAL</span><span class="badge badge-critical">⚠️ NEGLIGENCE</span></div><div style="font-weight:600;color:white">Lakshmi Nair · PAT000008 · Apollo Private Hospital</div><div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.6">NEGLIGENCE ALERT: Critical BP alert ignored for 7+ hours by Dr. Priya Nair. Patient condition worsened. BP: 148/94, Diabetes risk: 82.1%</div><div style="font-size:11px;color:#ff3b5c;margin-top:6px">Doctor: Dr. Priya Nair · Hours ignored: 7h · Status: ESCALATED</div></div><span class="badge badge-critical" style="flex-shrink:0">ESCALATED</span></div>
+          </div>
+          <div class="alert-card alert-critical">
+            <div style="display:flex;align-items:start;justify-content:space-between;gap:12px"><div><div style="display:flex;gap:6px;margin-bottom:8px"><span class="badge badge-critical">CRITICAL</span></div><div style="font-weight:600;color:white">Rajesh Kumar · PAT000003 · AIIMS Government Hospital</div><div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.6">Critical cardiac risk: Cholesterol 265 mg/dL, BP 162/105. Heart disease risk: 91.5%. Diabetes: 88.2%</div></div><button class="btn btn-danger" onclick="ackAlert(this)" style="flex-shrink:0;font-size:12px;padding:8px 14px">Acknowledge</button></div>
+          </div>
+          <div class="alert-card alert-high">
+            <div style="display:flex;align-items:start;justify-content:space-between;gap:12px"><div><div style="display:flex;gap:6px;margin-bottom:8px"><span class="badge badge-high">HIGH</span></div><div style="font-weight:600;color:white">Mohammed Khan · PAT000005 · Fortis National Hospital</div><div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.6">SGPT elevated to 145 U/L, SGOT 112. Bilirubin 2.8 mg/dL. Liver disease risk: 79.4%</div></div><button class="btn btn-ghost" onclick="ackAlert(this)" style="flex-shrink:0;font-size:12px;padding:8px 14px">Acknowledge</button></div>
+          </div>
+          <div class="alert-card alert-high">
+            <div style="display:flex;align-items:start;justify-content:space-between;gap:12px"><div><div style="display:flex;gap:6px;margin-bottom:8px"><span class="badge badge-high">HIGH</span></div><div style="font-weight:600;color:white">Arjun Sharma · PAT000001 · Apollo Private Hospital</div><div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.6">Fasting glucose: 165 mg/dL. HbA1c: 7.2%. Diabetes risk: 78.5%</div></div><span class="badge badge-low">✓ ACKNOWLEDGED</span></div>
+          </div>
+          <div class="alert-card" style="background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.2)">
+            <div style="display:flex;align-items:start;justify-content:space-between;gap:12px"><div><div style="display:flex;gap:6px;margin-bottom:8px"><span class="badge badge-medium">MEDIUM</span></div><div style="font-weight:600;color:white">Rekha Singh · PAT000006 · AIIMS Government Hospital</div><div style="font-size:12px;color:var(--text2);margin-top:4px">Pre-diabetes: Glucose 132, HbA1c 6.4%. Intervention recommended.</div></div><span class="badge badge-low">✓ RESOLVED</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── FL / ADMIN PAGE ─── -->
+      <div id="page-federated" class="page">
+        <div class="section-header">
+          <div><div class="section-title">Federated Learning</div><div class="section-sub">Hierarchical FL — Hospital → State → National · 15 rounds completed</div></div>
+          <button class="btn btn-primary" onclick="triggerFL()">▶ Trigger FL Round</button>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2)">🔄</div><div class="stat-value" style="color:var(--cyan)">15</div><div class="stat-label">Total Rounds</div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(0,255,135,.1);border:1px solid rgba(0,255,135,.2)">🏥</div><div class="stat-value" style="color:var(--green)">4</div><div class="stat-label">Connected Hospitals</div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2)">🧬</div><div class="stat-value" style="color:var(--purple)">12</div><div class="stat-label">Trained Models</div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.2)">✓</div><div class="stat-value" style="color:#00e676">Done</div><div class="stat-label">System Status</div></div>
+        </div>
+        <div class="grid-2" style="margin-bottom:20px">
+          <div class="card card-p">
+            <div class="card-title">📈 Training Progress</div>
+            <canvas id="flProgressChart" style="max-height:200px"></canvas>
+          </div>
+          <div class="card card-p">
+            <div class="card-title">🛡️ Hospital Trust Scores</div>
+            <div id="trustBars"></div>
+          </div>
+        </div>
+        <!-- Hierarchical architecture visual -->
+        <div class="card card-p">
+          <div class="card-title">🌐 Hierarchical FL Architecture</div>
+          <div class="fl-tier">
+            <div class="fl-node" style="background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.3)">
+              <div style="color:var(--cyan);font-size:14px;font-weight:700">🌍 National Server</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px">Global Model Aggregation — Trust-weighted FedAvg + Secure Aggregation</div>
+            </div>
+            <div style="display:flex;width:100%;justify-content:center;position:relative;height:24px"><div style="position:absolute;width:60%;height:1px;background:rgba(0,212,255,.3);top:50%"></div></div>
+            <div class="fl-row">
+              <div class="fl-node" style="background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.2)"><div style="font-size:11px;font-weight:600;color:var(--cyan)">Telangana</div><div style="font-size:10px;color:var(--muted)">State Node</div></div>
+              <div class="fl-node" style="background:rgba(0,255,135,.07);border:1px solid rgba(0,255,135,.2)"><div style="font-size:11px;font-weight:600;color:var(--green)">Delhi</div><div style="font-size:10px;color:var(--muted)">State Node</div></div>
+              <div class="fl-node" style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2)"><div style="font-size:11px;font-weight:600;color:var(--purple)">Punjab</div><div style="font-size:10px;color:var(--muted)">State Node</div></div>
+              <div class="fl-node" style="background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.2)"><div style="font-size:11px;font-weight:600;color:var(--yellow)">Bihar</div><div style="font-size:10px;color:var(--muted)">State Node</div></div>
+            </div>
+            <div style="display:flex;width:100%;justify-content:center;position:relative;height:20px"><div style="position:absolute;width:70%;height:1px;background:rgba(255,255,255,.08);top:50%"></div></div>
+            <div class="fl-row">
+              <div class="fl-node" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)"><div style="font-size:11px;color:var(--text2)">🏥 Apollo</div></div>
+              <div class="fl-node" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)"><div style="font-size:11px;color:var(--text2)">🏥 AIIMS</div></div>
+              <div class="fl-node" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)"><div style="font-size:11px;color:var(--text2)">🏥 Fortis</div></div>
+              <div class="fl-node" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)"><div style="font-size:11px;color:var(--text2)">🏥 District</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── ANALYTICS PAGE ─── -->
+      <div id="page-analytics" class="page">
+        <div class="section-header"><div><div class="section-title">Hospital Analytics</div><div class="section-sub">National healthcare intelligence across 4 hospitals</div></div></div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2)">👥</div><div class="stat-value" style="color:var(--cyan)">3,600</div><div class="stat-label">Total Patients</div><div class="stat-sub">Across 4 hospitals</div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(255,201,60,.1);border:1px solid rgba(255,201,60,.2)">🩸</div><div class="stat-value" style="color:var(--amber)">997</div><div class="stat-label">Diabetic Patients</div><div class="stat-sub">27.7% prevalence</div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(255,59,92,.1);border:1px solid rgba(255,59,92,.2)">❤️</div><div class="stat-value" style="color:#ff3b5c">1,931</div><div class="stat-label">Heart Disease</div><div class="stat-sub">53.6% prevalence</div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2)">🫀</div><div class="stat-value" style="color:var(--purple)">372</div><div class="stat-label">High Glucose</div><div class="stat-sub">Glucose &gt; 140</div></div>
+        </div>
+        <div class="grid-2" style="margin-bottom:20px">
+          <div class="card card-p"><div class="card-title">🏥 Model Accuracy by Hospital</div><canvas id="hospitalCompChart" style="max-height:220px"></canvas></div>
+          <div class="card card-p"><div class="card-title">🗺️ State Disease Distribution (Top 5)</div><canvas id="stateChart" style="max-height:220px"></canvas></div>
+        </div>
+        <div class="card card-p">
+          <div class="card-title">📊 Model Performance Summary</div>
+          <div style="overflow-x:auto">
+            <table class="data-table">
+              <thead><tr><th>Hospital</th><th>Disease</th><th>Accuracy</th><th>AUC-ROC</th><th>F1 Score</th><th>Precision</th><th>Recall</th></tr></thead>
+              <tbody id="perfTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── XAI PAGE ─── -->
+      <div id="page-xai" class="page">
+        <div class="section-header"><div><div class="section-title">AI Explainer (XAI)</div><div class="section-sub">SHAP-based feature importance — understand why the model predicts what it predicts</div></div></div>
+        <div class="tabs">
+          <div class="tab active" onclick="selectXAIDisease('diabetes',this)">🩸 Diabetes</div>
+          <div class="tab" onclick="selectXAIDisease('heart_disease',this)">❤️ Heart Disease</div>
+          <div class="tab" onclick="selectXAIDisease('liver_disease',this)">🫀 Liver Disease</div>
+        </div>
+        <div class="grid-2">
+          <div class="card card-p">
+            <div class="card-title" id="xaiTitle">SHAP Feature Importance — Diabetes</div>
+            <div id="xaiBars"></div>
+          </div>
+          <div class="card card-p">
+            <div class="card-title">📖 Clinical Interpretation</div>
+            <div id="xaiInterpretation"></div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════ DATA ════════════════════════════════════════
+const USERS = {
+  doctor1: {password:'doctor123',role:'doctor',name:'Dr. Priya Nair',hospital:'Apollo_Private_Hospital'},
+  nurse1: {password:'nurse123',role:'nurse',name:'Nurse Anita Singh',hospital:'Apollo_Private_Hospital'},
+  head1: {password:'head123',role:'head_doctor',name:'Dr. Ramesh Sharma',hospital:'Apollo_Private_Hospital'},
+  admin1: {password:'admin123',role:'admin',name:'System Administrator',hospital:'ALL'},
+  doctor2: {password:'doctor123',role:'doctor',name:'Dr. Karthik Reddy',hospital:'AIIMS_Government_Hospital'},
+};
+
+const PATIENTS = [
+  {id:'PAT000001',name:'Siddharth Patel',age:52,gender:'M',glucose:115,bp:'182/110',chol:214,dRisk:11.9,hRisk:83.2,risk:'Critical'},
+  {id:'PAT000003',name:'Aarav Naidu',age:54,gender:'M',glucose:86,bp:'152/98',chol:232,dRisk:37.8,hRisk:69.0,risk:'High'},
+  {id:'PAT000004',name:'Lakshmi Sharma',age:67,gender:'F',glucose:101,bp:'198/120',chol:198,dRisk:37.8,hRisk:76.9,risk:'Critical'},
+  {id:'PAT000006',name:'Rajesh Mishra',age:41,gender:'M',glucose:133,bp:'130/84',chol:185,dRisk:37.8,hRisk:31.0,risk:'Medium'},
+  {id:'PAT000007',name:'Rajesh Pillai',age:68,gender:'M',glucose:153,bp:'194/118',chol:268,dRisk:81.8,hRisk:83.2,risk:'Critical'},
+  {id:'PAT000008',name:'Suresh Reddy',age:56,gender:'F',glucose:130,bp:'181/112',chol:225,dRisk:50.0,hRisk:59.9,risk:'High'},
+];
+
+const PERF_DATA = [
+  ['Apollo Private','diabetes',0.750,0.683,0.429,0.712,0.380],
+  ['Apollo Private','heart_disease',0.631,0.699,0.651,0.654,0.648],
+  ['Apollo Private','liver_disease',0.681,0.659,0.370,0.625,0.310],
+  ['AIIMS Govt','diabetes',0.725,0.690,0.431,0.698,0.360],
+  ['AIIMS Govt','heart_disease',0.675,0.699,0.713,0.681,0.748],
+  ['Fortis National','diabetes',0.725,0.696,0.353,0.680,0.295],
+  ['Fortis National','heart_disease',0.600,0.624,0.676,0.614,0.750],
+  ['District Rural','diabetes',0.755,0.723,0.423,0.724,0.365],
+  ['District Rural','heart_disease',0.635,0.700,0.654,0.651,0.657],
+];
+
+const SHAP_DATA = {
+  diabetes: {
+    'Fasting Glucose':0.342,'HbA1c':0.298,'BMI':0.189,
+    'Family Hx (Diabetes)':0.145,'Insulin Level':0.132,
+    'Age':0.098,'Exercise Level':-0.087,'Diet Type':-0.065,
+    'Smoking Status':0.042,'Alcohol Intake':0.038
+  },
+  heart_disease: {
+    'LDL Cholesterol':0.312,'Total Cholesterol':0.289,'Systolic BP':0.245,
+    'Smoking Status':0.198,'Family Hx (Heart)':0.187,
+    'Age':0.156,'HDL Cholesterol':-0.132,'Triglycerides':0.098,
+    'BMI':0.076,'Exercise Level':-0.065
+  },
+  liver_disease: {
+    'SGPT (ALT)':0.389,'SGOT (AST)':0.334,'Alcohol Intake':0.278,
+    'Bilirubin Total':0.198,'BMI':0.145,'Family Hx (Liver)':0.132,
+    'Alk. Phosphatase':0.098,'Albumin':-0.076,
+    'Diet Type':-0.054,'Exercise Level':-0.042
+  }
+};
+
+const INTERPRETATIONS = {
+  diabetes:`<div style="space-y-3">
+    <div style="padding:12px;border-radius:10px;background:rgba(255,59,92,.07);border:1px solid rgba(255,59,92,.2);margin-bottom:10px">
+      <div style="font-size:11px;font-weight:700;color:#ff3b5c;margin-bottom:4px">⚠️ Primary Risk Factors</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6"><strong style="color:white">Fasting Glucose</strong> is the strongest predictor. Values ≥126 mg/dL indicate diabetes; 100–125 is pre-diabetic. <strong style="color:white">HbA1c</strong> reflects 3-month average blood sugar — ≥6.5% confirms diabetes.</div>
+    </div>
+    <div style="padding:12px;border-radius:10px;background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.2)">
+      <div style="font-size:11px;font-weight:700;color:#00e676;margin-bottom:4px">✓ Protective Factors</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6">Regular <strong style="color:white">exercise</strong> and a <strong style="color:white">vegetarian diet</strong> are protective. Increasing physical activity can reduce diabetes risk by up to 58% in pre-diabetic patients.</div>
+    </div>
+    <div style="padding:12px;border-radius:10px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15)">
+      <div style="font-size:11px;font-weight:700;color:var(--cyan);margin-bottom:4px">📋 Clinical Recommendation</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6">For high-risk patients (glucose &gt;126 or HbA1c &gt;6.5%): refer to endocrinologist, initiate metformin if appropriate, provide dietary counseling, and schedule HbA1c monitoring every 3 months.</div>
+    </div>
+  </div>`,
+  heart_disease:`<div>
+    <div style="padding:12px;border-radius:10px;background:rgba(255,59,92,.07);border:1px solid rgba(255,59,92,.2);margin-bottom:10px">
+      <div style="font-size:11px;font-weight:700;color:#ff3b5c;margin-bottom:4px">⚠️ Primary Risk Factors</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6"><strong style="color:white">LDL Cholesterol</strong> &gt;130 mg/dL significantly increases plaque formation. <strong style="color:white">Systolic BP</strong> &gt;140 mmHg doubles cardiac risk. <strong style="color:white">Smoking</strong> accelerates atherosclerosis.</div>
+    </div>
+    <div style="padding:12px;border-radius:10px;background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.2)">
+      <div style="font-size:11px;font-weight:700;color:#00e676;margin-bottom:4px">✓ Protective Factors</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6"><strong style="color:white">HDL Cholesterol</strong> &gt;60 mg/dL is cardio-protective. Each 1 mg/dL increase reduces cardiac risk by 2-3%.</div>
+    </div>
+    <div style="padding:12px;border-radius:10px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15)">
+      <div style="font-size:11px;font-weight:700;color:var(--cyan);margin-bottom:4px">📋 Recommendation</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6">Statin therapy for LDL &gt;130. ACE inhibitor for hypertension. Smoking cessation. Cardiac stress test if AUC-ROC &gt;75%. Refer to cardiologist urgently if critical.</div>
+    </div>
+  </div>`,
+  liver_disease:`<div>
+    <div style="padding:12px;border-radius:10px;background:rgba(255,59,92,.07);border:1px solid rgba(255,59,92,.2);margin-bottom:10px">
+      <div style="font-size:11px;font-weight:700;color:#ff3b5c;margin-bottom:4px">⚠️ Primary Risk Factors</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6"><strong style="color:white">SGPT/ALT</strong> &gt;56 U/L and <strong style="color:white">SGOT/AST</strong> &gt;40 U/L indicate hepatocellular damage. <strong style="color:white">Alcohol consumption</strong> is the single largest modifiable risk factor.</div>
+    </div>
+    <div style="padding:12px;border-radius:10px;background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.2)">
+      <div style="font-size:11px;font-weight:700;color:#00e676;margin-bottom:4px">✓ Protective Factors</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6"><strong style="color:white">Albumin</strong> ≥3.4 g/dL indicates good synthetic liver function. <strong style="color:white">Plant-based diet</strong> reduces NAFLD risk by up to 40%.</div>
+    </div>
+    <div style="padding:12px;border-radius:10px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15)">
+      <div style="font-size:11px;font-weight:700;color:var(--cyan);margin-bottom:4px">📋 Recommendation</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6">Complete alcohol cessation. Liver ultrasound and biopsy if SGPT &gt;3× ULN. Hepatology referral. LFT repeat in 4-6 weeks. Avoid hepatotoxic medications.</div>
+    </div>
+  </div>`
+};
+
+const TRUST_SCORES = [
+  {hospital:'Apollo Private Hospital',score:0.636,rounds:15},
+  {hospital:'AIIMS Government Hospital',score:0.624,rounds:14},
+  {hospital:'Fortis National Hospital',score:0.615,rounds:13},
+  {hospital:'District Rural Hospital',score:0.585,rounds:11},
+];
+
+const NAV_CONFIG = {
+  doctor:[
+    {id:'dashboard',label:'Dashboard',icon:'⬡'},
+    {id:'predict',label:'Risk Prediction',icon:'🔬'},
+    {id:'alerts',label:'Alerts',icon:'🔔',badge:3},
+    {id:'xai',label:'AI Explainer',icon:'🧠'},
+    {id:'analytics',label:'Analytics',icon:'📈'},
+  ],
+  nurse:[
+    {id:'dashboard',label:'Dashboard',icon:'⬡'},
+    {id:'predict',label:'Predict Risk',icon:'🔬'},
+    {id:'alerts',label:'Alert Panel',icon:'🔔',badge:3},
+    {id:'analytics',label:'Analytics',icon:'📊'},
+  ],
+  head_doctor:[
+    {id:'dashboard',label:'Dashboard',icon:'⬡'},
+    {id:'analytics',label:'Hospital Analytics',icon:'📈'},
+    {id:'alerts',label:'Negligence Reports',icon:'⚠️',badge:1},
+    {id:'federated',label:'Federated Learning',icon:'🌐'},
+    {id:'xai',label:'AI Explainer',icon:'🧠'},
+  ],
+  admin:[
+    {id:'dashboard',label:'Dashboard',icon:'⬡'},
+    {id:'federated',label:'Federated Learning',icon:'🌐'},
+    {id:'analytics',label:'Analytics',icon:'📈'},
+    {id:'alerts',label:'Audit & Alerts',icon:'📋'},
+    {id:'xai',label:'XAI Module',icon:'🧠'},
+  ],
+};
+
+const ROLE_LABELS = {doctor:'Doctor Portal',nurse:'Nurse Station',head_doctor:'Medical Director',admin:'System Admin'};
+const ROLE_COLORS = {doctor:'#00d4ff',nurse:'#00ff87',head_doctor:'#a78bfa',admin:'#ffd700'};
+
+let currentUser = null;
+let charts = {};
+
+// ════════════════════════════════════════ AUTH ════════════════════════════════════════
+function doLogin(){
+  const u = document.getElementById('loginUser').value;
+  const p = document.getElementById('loginPass').value;
+  const user = USERS[u];
+  if(!user || user.password !== p){
+    const el = document.getElementById('loginError');
+    el.textContent = 'Invalid credentials. Use the demo accounts below.';
+    el.style.display = 'block';
+    return;
+  }
+  login({...user, username:u});
+}
+
+function quickLogin(u, p, role){
+  document.getElementById('loginUser').value = u;
+  document.getElementById('loginPass').value = p;
+  login({...USERS[u], username:u});
+}
+
+function login(user){
+  currentUser = user;
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'flex';
+  setupSidebar(user);
+  setupTopbar(user);
+  initCharts();
+  populatePatientTable();
+  populatePerfTable();
+  renderTrustBars();
+  renderXAI('diabetes');
+  switchPage('dashboard');
+  startClock();
+}
+
+function doLogout(){
+  currentUser = null;
+  document.getElementById('mainApp').style.display = 'none';
+  document.getElementById('loginPage').style.display = 'flex';
+  Object.values(charts).forEach(c => { try{ c.destroy(); }catch{} });
+  charts = {};
+}
+
+function setupSidebar(user){
+  const rc = ROLE_COLORS[user.role] || '#00d4ff';
+  document.getElementById('roleLabel').textContent = ROLE_LABELS[user.role] || 'Portal';
+  document.getElementById('roleLabel').style.color = rc;
+  document.getElementById('userName').textContent = user.name;
+  document.getElementById('userHospital').textContent = (user.hospital||'').replace(/_/g,' ');
+  document.getElementById('userAvatar').textContent = user.name.charAt(0);
+  document.getElementById('userAvatar').style.color = rc;
+
+  const nav = NAV_CONFIG[user.role] || NAV_CONFIG.doctor;
+  document.getElementById('sidebarNav').innerHTML = nav.map(item => `
+    <div class="nav-item" id="nav-${item.id}" onclick="switchPage('${item.id}')">
+      <span style="font-size:15px">${item.icon}</span>
+      <span>${item.label}</span>
+      ${item.badge ? `<span class="nav-badge">${item.badge}</span>` : ''}
+    </div>
+  `).join('');
+}
+
+function setupTopbar(user){
+  document.getElementById('topbarName').textContent = user.name;
+  document.getElementById('dashboardSub').textContent = `${user.name} · ${(user.hospital||'').replace(/_/g,' ')}`;
+}
+
+// ════════════════════════════════════════ NAVIGATION ════════════════════════════════════════
+function switchPage(id){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById(`page-${id}`);
+  if(page) page.classList.add('active');
+  const navItem = document.getElementById(`nav-${id}`);
+  if(navItem) navItem.classList.add('active');
+  document.getElementById('alertDropdown').style.display = 'none';
+  // Reinit charts when switching to pages with charts
+  if(id === 'analytics') setTimeout(initAnalyticsCharts, 50);
+  if(id === 'federated') setTimeout(initFLChart, 50);
+}
+
+// ════════════════════════════════════════ CLOCK ════════════════════════════════════════
+function startClock(){
+  setInterval(()=>{
+    const now = new Date();
+    document.getElementById('liveTime').textContent = now.toLocaleTimeString('en-IN',{hour12:false});
+  }, 1000);
+}
+
+// ════════════════════════════════════════ CHARTS ════════════════════════════════════════
+const CHART_DEFAULTS = {
+  plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(4,10,24,.95)',borderColor:'rgba(0,212,255,.2)',borderWidth:1,titleColor:'#e8f4fd',bodyColor:'#7aa8c7',cornerRadius:10,padding:10}},
+  scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#4a6a85',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#4a6a85',font:{size:10}}}},
+};
+
+function initCharts(){
+  // Trend chart
+  const tCtx = document.getElementById('trendChart');
+  if(tCtx && !charts.trend){
+    charts.trend = new Chart(tCtx,{
+      type:'line',
+      data:{
+        labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        datasets:[
+          {label:'Diabetes',data:[142,156,168,155,178,192,185,201,195,210,205,218],borderColor:'#00d4ff',backgroundColor:'rgba(0,212,255,.08)',fill:true,tension:0.4,pointRadius:0},
+          {label:'Heart Disease',data:[98,112,125,108,132,145,138,152,148,165,158,172],borderColor:'#ff3b5c',backgroundColor:'rgba(255,59,92,.06)',fill:true,tension:0.4,pointRadius:0},
+          {label:'Liver Disease',data:[67,72,81,75,88,95,91,102,98,108,105,115],borderColor:'#ffc93c',backgroundColor:'rgba(255,201,60,.06)',fill:true,tension:0.4,pointRadius:0},
+        ]
+      },
+      options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,legend:{display:false}},responsive:true,maintainAspectRatio:false}
+    });
+  }
+}
+
+function initAnalyticsCharts(){
+  // Hospital accuracy
+  const hCtx = document.getElementById('hospitalCompChart');
+  if(hCtx){
+    if(charts.hosp) charts.hosp.destroy();
+    charts.hosp = new Chart(hCtx,{
+      type:'bar',
+      data:{
+        labels:['Apollo','AIIMS','Fortis','District'],
+        datasets:[
+          {label:'Diabetes AUC',data:[0.683,0.690,0.696,0.723],backgroundColor:['rgba(0,212,255,.7)','rgba(0,255,135,.7)','rgba(167,139,250,.7)','rgba(255,215,0,.7)'],borderRadius:6},
+        ]
+      },
+      options:{...CHART_DEFAULTS,responsive:true,maintainAspectRatio:false,scales:{...CHART_DEFAULTS.scales,y:{...CHART_DEFAULTS.scales.y,min:0.5,max:1}}}
+    });
+  }
+  // State chart
+  const sCtx = document.getElementById('stateChart');
+  if(sCtx){
+    if(charts.state) charts.state.destroy();
+    charts.state = new Chart(sCtx,{
+      type:'bar',
+      data:{
+        labels:['Uttar Pradesh','Maharashtra','Bihar','West Bengal','Telangana'],
+        datasets:[
+          {label:'Diabetes',data:[245,198,215,178,165],backgroundColor:'rgba(0,212,255,.65)',borderRadius:4},
+          {label:'Heart',data:[189,165,142,134,128],backgroundColor:'rgba(255,59,92,.65)',borderRadius:4},
+        ]
+      },
+      options:{...CHART_DEFAULTS,responsive:true,maintainAspectRatio:false,plugins:{...CHART_DEFAULTS.plugins,legend:{display:true,labels:{color:'#7aa8c7',font:{size:10}}}}}
+    });
+  }
+}
+
+function initFLChart(){
+  const fCtx = document.getElementById('flProgressChart');
+  if(fCtx){
+    if(charts.fl) charts.fl.destroy();
+    const rounds = Array.from({length:15},(_,i)=>i+1);
+    const acc = rounds.map(r => 0.62 + r*0.017 + (Math.random()-.5)*0.01);
+    const loss = rounds.map(r => 0.52 - r*0.022 + (Math.random()-.5)*0.01);
+    charts.fl = new Chart(fCtx,{
+      type:'line',
+      data:{
+        labels:rounds,
+        datasets:[
+          {label:'Avg Accuracy',data:acc,borderColor:'#00d4ff',backgroundColor:'rgba(0,212,255,.08)',fill:true,tension:0.4,pointRadius:3,pointBackgroundColor:'#00d4ff'},
+          {label:'Avg Loss',data:loss,borderColor:'#ff7a2e',backgroundColor:'rgba(255,122,46,.06)',fill:true,tension:0.4,pointRadius:3,pointBackgroundColor:'#ff7a2e',borderDash:[4,2]},
+        ]
+      },
+      options:{...CHART_DEFAULTS,responsive:true,maintainAspectRatio:false,plugins:{...CHART_DEFAULTS.plugins,legend:{display:true,labels:{color:'#7aa8c7',font:{size:10}}}},scales:{...CHART_DEFAULTS.scales,x:{...CHART_DEFAULTS.scales.x,title:{display:true,text:'FL Round',color:'#4a6a85',font:{size:9}}},y:{...CHART_DEFAULTS.scales.y,min:0,max:1}}}
+    });
+  }
+}
+
+// ════════════════════════════════════════ TABLES ════════════════════════════════════════
+function populatePatientTable(){
+  const tbody = document.getElementById('patientTableBody');
+  if(!tbody) return;
+  const riskColor = r => r==='Critical'?'#ff3b5c':r==='High'?'#ff7a2e':r==='Medium'?'#ffc93c':'#00e676';
+  const badge = r => `<span class="badge badge-${r.toLowerCase()}">${r}</span>`;
+  tbody.innerHTML = PATIENTS.map(p => `
+    <tr>
+      <td><div style="font-weight:600;color:white;font-size:12px">${p.name}</div><div style="font-size:10px;color:var(--muted)">${p.id}</div></td>
+      <td>${p.age}y, ${p.gender}</td>
+      <td><span class="font-mono" style="color:${p.glucose>126?'#ff7a2e':'var(--text2)'};font-size:12px">${p.glucose}</span></td>
+      <td><span class="font-mono" style="color:${parseInt(p.bp)>140?'#ff7a2e':'var(--text2)'};font-size:12px">${p.bp}</span></td>
+      <td><span class="font-mono" style="font-size:12px">${p.chol}</span></td>
+      <td>${badge(p.risk)}</td>
+      <td><span class="font-mono" style="color:${riskColor(p.risk)};font-size:12px">${Math.max(p.dRisk,p.hRisk).toFixed(1)}%</span></td>
+      <td><button class="btn btn-ghost" style="font-size:11px;padding:5px 10px" onclick="runPredictionForPatient('${p.id}')">Predict</button></td>
+    </tr>
+  `).join('');
+}
+
+function populatePerfTable(){
+  const tbody = document.getElementById('perfTableBody');
+  if(!tbody) return;
+  const scoreColor = v => v>=0.7?'#00e676':v>=0.65?'#00d4ff':v>=0.60?'#ffc93c':'#ff7a2e';
+  tbody.innerHTML = PERF_DATA.map(([h,d,acc,auc,f1,prec,rec]) => `
+    <tr>
+      <td style="color:white;font-weight:500;font-size:12px">${h}</td>
+      <td><span class="badge badge-info">${d.replace('_',' ')}</span></td>
+      <td><span class="font-mono" style="color:${scoreColor(acc)};font-size:12px">${acc.toFixed(3)}</span></td>
+      <td><span class="font-mono" style="color:${scoreColor(auc)};font-size:12px">${auc.toFixed(3)}</span></td>
+      <td><span class="font-mono" style="font-size:12px">${f1.toFixed(3)}</span></td>
+      <td><span class="font-mono" style="font-size:12px">${prec.toFixed(3)}</span></td>
+      <td><span class="font-mono" style="font-size:12px">${rec.toFixed(3)}</span></td>
+    </tr>
+  `).join('');
+}
+
+function renderTrustBars(){
+  const el = document.getElementById('trustBars');
+  if(!el) return;
+  const scoreColor = s => s>0.63?'#00e676':s>0.61?'#00d4ff':'#ffc93c';
+  el.innerHTML = TRUST_SCORES.map((t,i) => `
+    <div class="trust-row">
+      <span style="font-size:11px;font-weight:700;color:var(--muted);width:18px;text-align:center">#${i+1}</span>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+          <span style="font-size:12px;font-weight:500;color:white;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.hospital}</span>
+          <span class="font-mono" style="font-size:11px;font-weight:700;color:${scoreColor(t.score)};margin-left:8px;flex-shrink:0">${(t.score*100).toFixed(1)}%</span>
+        </div>
+        <div class="trust-bar-outer"><div class="trust-bar-fill" style="width:${t.score*100}%;background:linear-gradient(90deg,${scoreColor(t.score)}60,${scoreColor(t.score)})"></div></div>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px">${t.rounds} FL rounds participated</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ════════════════════════════════════════ XAI ════════════════════════════════════════
+function renderXAI(disease){
+  const data = SHAP_DATA[disease];
+  if(!data) return;
+  const entries = Object.entries(data).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1]));
+  const maxVal = Math.max(...entries.map(([,v])=>Math.abs(v)));
+  const colors = {0:'#ff3b5c',1:'#ff3b5c',2:'#ff7a2e',3:'#ff7a2e',4:'#ffc93c',5:'#ffc93c',6:'#00d4ff',7:'#00d4ff',8:'#00ff87',9:'#00ff87'};
+
+  document.getElementById('xaiBars').innerHTML = entries.map(([feat,val],i) => {
+    const pct = (Math.abs(val)/maxVal*100).toFixed(1);
+    const color = val < 0 ? '#00ff87' : (colors[i] || '#00d4ff');
+    const dir = val < 0 ? '▼ protective' : '▲ risk';
+    return `
+      <div class="shap-row">
+        <span class="shap-label" title="${feat}">${feat}</span>
+        <div class="shap-bar-outer">
+          <div class="shap-bar-inner" style="width:${pct}%;background:linear-gradient(90deg,${color}60,${color})"></div>
+        </div>
+        <span class="shap-val" style="color:${color}">${Math.abs(val).toFixed(3)}</span>
+        <span style="font-size:9px;color:${color};width:70px;text-align:right">${dir}</span>
+      </div>`;
+  }).join('');
+  document.getElementById('xaiInterpretation').innerHTML = INTERPRETATIONS[disease] || '';
+}
+
+function selectXAIDisease(disease, el){
+  document.querySelectorAll('#page-xai .tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const titles = {diabetes:'SHAP Feature Importance — Diabetes',heart_disease:'SHAP Feature Importance — Heart Disease',liver_disease:'SHAP Feature Importance — Liver Disease'};
+  document.getElementById('xaiTitle').textContent = titles[disease] || '';
+  renderXAI(disease);
+}
+
+// ════════════════════════════════════════ PREDICTION ════════════════════════════════════════
+function getVal(id){ return parseFloat(document.getElementById(id)?.value||0)||0; }
+function getStr(id){ return document.getElementById(id)?.value||''; }
+
+function runPrediction(){
+  const glucose = getVal('p_glucose');
+  const hba1c = getVal('p_hba1c');
+  const bmi = getVal('p_bmi');
+  const sbp = getVal('p_sbp');
+  const chol = getVal('p_chol');
+  const ldl = getVal('p_ldl');
+  const hdl = getVal('p_hdl');
+  const sgpt = getVal('p_sgpt');
+  const sgot = getVal('p_sgot');
+  const bili = getVal('p_bili');
+  const age = getVal('p_age');
+  const fhd = getVal('p_fhd');
+  const fhh = getVal('p_fhh');
+  const fhl = getVal('p_fhl');
+  const smoking = getStr('p_smoking');
+  const alcohol = getStr('p_alcohol');
+  const exercise = getStr('p_exercise');
+
+  const smap = {Never:0,Former:1,Current:2};
+  const amap = {Never:0,Occasional:1,Regular:2,Heavy:3};
+  const emap = {None:0,Light:1,Moderate:2,Heavy:3};
+
+  let dRisk = Math.min(95,Math.max(3,
+    (glucose-90)*0.25 + (hba1c-5)*7 + (bmi>27?(bmi-27)*1.2:0) + fhd*15 +
+    (emap[exercise]===0?10:0) + (smap[smoking]===2?5:0)
+  ));
+  let hRisk = Math.min(95,Math.max(3,
+    (chol-180)*0.12 + (ldl-100)*0.15 + (sbp-120)*0.25 + smap[smoking]*8 + fhh*15 + (age-40)*0.3 - (hdl-40)*0.2
+  ));
+  let lRisk = Math.min(95,Math.max(3,
+    (sgpt-30)*0.28 + (sgot-28)*0.22 + amap[alcohol]*12 + fhl*12 + (bmi>30?(bmi-30)*1.5:0) + (bili>1.2?(bili-1.2)*8:0)
+  ));
+
+  dRisk = Math.round(dRisk*10)/10;
+  hRisk = Math.round(hRisk*10)/10;
+  lRisk = Math.round(lRisk*10)/10;
+
+  const maxRisk = Math.max(dRisk, hRisk, lRisk);
+  const overall = maxRisk>75?'Critical':maxRisk>55?'High':maxRisk>35?'Moderate':'Low';
+  const overallColor = maxRisk>75?'#ff3b5c':maxRisk>55?'#ff7a2e':maxRisk>35?'#ffc93c':'#00e676';
+
+  document.getElementById('overallBanner').style.background = maxRisk>75?'rgba(255,59,92,.08)':maxRisk>55?'rgba(255,122,46,.08)':'rgba(0,212,255,.06)';
+  document.getElementById('overallBanner').style.border = `1px solid ${overallColor}30`;
+  document.getElementById('overallBanner').innerHTML = `
+    <div>
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px">Overall Risk Assessment</div>
+      <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:${overallColor}">${overall} Risk</div>
+      <div style="font-size:13px;color:var(--text2);margin-top:4px">${maxRisk>55?'Elevated risk detected. Immediate clinical evaluation recommended.':'No immediate high-risk conditions. Continue regular monitoring.'}</div>
+    </div>
+    <div style="font-size:48px">${maxRisk>75?'🚨':maxRisk>55?'⚠️':'✅'}</div>
+  `;
+
+  const diseases = [
+    {name:'Diabetes',risk:dRisk,shapData:SHAP_DATA.diabetes},
+    {name:'Heart Disease',risk:hRisk,shapData:SHAP_DATA.heart_disease},
+    {name:'Liver Disease',risk:lRisk,shapData:SHAP_DATA.liver_disease},
+  ];
+
+  document.getElementById('riskMeters').innerHTML = diseases.map(d => {
+    const color = d.risk>75?'#ff3b5c':d.risk>55?'#ff7a2e':d.risk>35?'#ffc93c':'#00e676';
+    const label = d.risk>75?'Critical':d.risk>55?'High':d.risk>35?'Medium':'Low';
+    const R = 50, C = 2*Math.PI*R;
+    const dash = (d.risk/100)*C;
+    const recs = {Diabetes:'Monitor HbA1c monthly. Endocrinology consult. Low-GI diet.',
+      'Heart Disease':'Cardiac evaluation. Lipid management. Smoking cessation.',
+      'Liver Disease':'Avoid alcohol. LFT repeat in 4 weeks. Hepatology consult.'};
+    return `<div class="card card-p">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <span style="font-family:'Syne',sans-serif;font-weight:700;color:white;font-size:14px">${d.name}</span>
+        <span class="badge badge-${label.toLowerCase()}">${label}</span>
+      </div>
+      <div style="display:flex;justify-content:center;margin-bottom:14px">
+        <div style="position:relative;width:120px;height:120px">
+          <svg width="120" height="120" style="transform:rotate(-90deg)">
+            <circle cx="60" cy="60" r="${R}" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="8"/>
+            <circle cx="60" cy="60" r="${R}" fill="none" stroke="${color}" stroke-width="8" stroke-linecap="round"
+              stroke-dasharray="${C}" stroke-dashoffset="${C-dash}" style="filter:drop-shadow(0 0 6px ${color});transition:stroke-dashoffset 1.5s ease"/>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:600;color:${color}">${d.risk.toFixed(0)}%</span>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);text-align:center;line-height:1.5;margin-bottom:12px">${recs[d.name]}</div>
+      <div style="border-top:1px solid rgba(255,255,255,.05);padding-top:10px">
+        <div style="font-size:10px;font-weight:600;color:var(--muted);margin-bottom:7px;text-transform:uppercase;letter-spacing:.06em">Top Risk Factors</div>
+        ${Object.entries(d.shapData).filter(([,v])=>v>0).slice(0,3).map(([f,v])=>`
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:3px 0">
+            <span style="font-size:11px;color:var(--text2)">${f}</span>
+            <span style="font-size:11px;font-family:'JetBrains Mono',monospace;color:${color}">+${v.toFixed(3)}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  // SHAP chart tabs
+  document.getElementById('shapTabs').innerHTML = diseases.map((d,i)=>`
+    <div class="tab ${i===0?'active':''}" onclick="showPredShap(${i},this)">${d.name}</div>`).join('');
+  showPredShapData(SHAP_DATA.diabetes);
+
+  document.getElementById('predResults').style.display = 'block';
+  document.getElementById('predResults').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+let predShapDisease = ['diabetes','heart_disease','liver_disease'];
+function showPredShap(idx, el){
+  document.querySelectorAll('#shapTabs .tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  showPredShapData(SHAP_DATA[predShapDisease[idx]]);
+}
+function showPredShapData(data){
+  const entries = Object.entries(data).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1]));
+  const maxVal = Math.max(...entries.map(([,v])=>Math.abs(v)));
+  const colors = ['#ff3b5c','#ff3b5c','#ff7a2e','#ff7a2e','#ffc93c','#ffc93c','#00d4ff','#00d4ff','#00ff87','#00ff87'];
+  document.getElementById('shapBars').innerHTML = entries.map(([feat,val],i)=>{
+    const pct = (Math.abs(val)/maxVal*100).toFixed(1);
+    const color = val<0?'#00ff87':(colors[i]||'#00d4ff');
+    return `<div class="shap-row">
+      <span class="shap-label">${feat}</span>
+      <div class="shap-bar-outer"><div class="shap-bar-inner" style="width:${pct}%;background:linear-gradient(90deg,${color}55,${color})"></div></div>
+      <span class="shap-val" style="color:${color}">${Math.abs(val).toFixed(3)}</span>
+    </div>`;
+  }).join('');
+}
+
+function runPredictionForPatient(id){
+  switchPage('predict');
+  setTimeout(runPrediction,100);
+}
+
+// ════════════════════════════════════════ FL TRIGGER ════════════════════════════════════════
+function triggerFL(){
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = '⏳ Running FL Round 16...';
+  btn.style.opacity = '.7';
+  setTimeout(()=>{
+    btn.disabled = false;
+    btn.textContent = '✅ Round 16 Complete!';
+    btn.style.background = 'linear-gradient(135deg,#00e676,#00c853)';
+    setTimeout(()=>{
+      btn.textContent = '▶ Trigger FL Round';
+      btn.style.background = '';
+    },3000);
+  },3000);
+}
+
+// ════════════════════════════════════════ ALERTS ════════════════════════════════════════
+function ackAlert(btn){
+  const card = btn.closest('.alert-card');
+  btn.style.display = 'none';
+  const badge = document.createElement('span');
+  badge.className = 'badge badge-low';
+  badge.textContent = '✓ ACKNOWLEDGED';
+  card.querySelector('[style*="justify-content:space-between"]').appendChild(badge);
+  card.style.opacity = '.6';
+}
+
+function toggleAlertDropdown(){
+  const el = document.getElementById('alertDropdown');
+  el.style.display = el.style.display==='none'?'block':'none';
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#alertDropdown') && !e.target.closest('button[onclick*="toggleAlert"]')){
+    const d = document.getElementById('alertDropdown');
+    if(d) d.style.display='none';
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1421 @@
+{
+  "trust_scores": {
+    "Apollo_Private_Hospital": {
+      "hospital_id": "Apollo_Private_Hospital",
+      "trust_score": 0.7716,
+      "accuracy_history": [
+        0.92,
+        0.73125,
+        0.7125,
+        0.7,
+        0.59375,
+        0.575,
+        0.6625,
+        0.61875,
+        0.575,
+        0.525
+      ],
+      "data_quality_score": 0.92,
+      "participation_rate": 1.0,
+      "anomaly_count": 0,
+      "last_updated": "2026-03-20T15:00:25.011630"
+    },
+    "AIIMS_Government_Hospital": {
+      "hospital_id": "AIIMS_Government_Hospital",
+      "trust_score": 0.7707,
+      "accuracy_history": [
+        0.88,
+        0.7541666666666667,
+        0.7375,
+        0.725,
+        0.6083333333333333,
+        0.6458333333333334,
+        0.6208333333333333,
+        0.6041666666666666,
+        0.6333333333333333,
+        0.5625
+      ],
+      "data_quality_score": 0.88,
+      "participation_rate": 1.0,
+      "anomaly_count": 0,
+      "last_updated": "2026-03-20T15:00:25.046585"
+    },
+    "Fortis_National_Hospital": {
+      "hospital_id": "Fortis_National_Hospital",
+      "trust_score": 0.7633,
+      "accuracy_history": [
+        0.85,
+        0.65,
+        0.65,
+        0.75,
+        0.7416666666666667,
+        0.6083333333333333,
+        0.6666666666666666,
+        0.6166666666666667,
+        0.5833333333333334,
+        0.6083333333333333
+      ],
+      "data_quality_score": 0.85,
+      "participation_rate": 1.0,
+      "anomaly_count": 0,
+      "last_updated": "2026-03-20T15:00:25.083279"
+    },
+    "District_Rural_Hospital": {
+      "hospital_id": "District_Rural_Hospital",
+      "trust_score": 0.7345,
+      "accuracy_history": [
+        0.75,
+        0.675,
+        0.745,
+        0.735,
+        0.685,
+        0.68,
+        0.65,
+        0.575,
+        0.56,
+        0.63
+      ],
+      "data_quality_score": 0.75,
+      "participation_rate": 1.0,
+      "anomaly_count": 0,
+      "last_updated": "2026-03-20T15:00:25.120304"
+    }
+  },
+  "round_history": [
+    {
+      "round": 1,
+      "disease": "diabetes",
+      "n_hospitals": 4,
+      "hospital_metrics": [
+        {
+          "hospital": "Apollo_Private_Hospital",
+          "accuracy": 0.73125,
+          "loss": 0.5652742079924792,
+          "n_samples": 640,
+          "trust_score": 0.8888
+        },
+        {
+          "hospital": "AIIMS_Government_Hospital",
+          "accuracy": 0.7541666666666667,
+          "loss": 0.5196553773091485,
+          "n_samples": 960,
+          "trust_score": 0.8725
+        },
+        {
+          "hospital": "Fortis_National_Hospital",
+          "accuracy": 0.65,
+          "loss": 0.6672193869017065,
+          "n_samples": 480,
+          "trust_score": 0.83
+        },
+        {
+          "hospital": "District_Rural_Hospital",
+          "accuracy": 0.675,
+          "loss": 0.6216373672336339,
+          "n_samples": 800,
+          "trust_score": 0.7812
+        }
+      ],
+      "avg_accuracy": 0.7026041666666667,
+      "avg_loss": 0.5934465848592421,
+      "trust_scores": {
+        "Apollo_Private_Hospital": {
+          "hospital_id": "Apollo_Private_Hospital",
+          "trust_score": 0.8888,
+          "accuracy_history": [
+            0.92,
+            0.73125
+          ],
+          "data_quality_score": 0.92,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:21.436228"
+        },
+        "AIIMS_Government_Hospital": {
+          "hospital_id": "AIIMS_Government_Hospital",
+          "trust_score": 0.8725,
+          "accuracy_history": [
+            0.88,
+            0.7541666666666667
+          ],
+          "data_quality_score": 0.88,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:21.477876"
+        },
+        "Fortis_National_Hospital": {
+          "hospital_id": "Fortis_National_Hospital",
+          "trust_score": 0.83,
+          "accuracy_history": [
+            0.85,
+            0.65
+          ],
+          "data_quality_score": 0.85,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:21.514889"
+        },
+        "District_Rural_Hospital": {
+          "hospital_id": "District_Rural_Hospital",
+          "trust_score": 0.7812,
+          "accuracy_history": [
+            0.75,
+            0.675
+          ],
+          "data_quality_score": 0.75,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:21.553253"
+        }
+      },
+      "timestamp": "2026-03-20T15:00:21.553890"
+    },
+    {
+      "round": 2,
+      "disease": "diabetes",
+      "n_hospitals": 4,
+      "hospital_metrics": [
+        {
+          "hospital": "Apollo_Private_Hospital",
+          "accuracy": 0.7125,
+          "loss": 0.6192689146846533,
+          "n_samples": 640,
+          "trust_score": 0.87
+        },
+        {
+          "hospital": "AIIMS_Government_Hospital",
+          "accuracy": 0.7375,
+          "loss": 0.5516647525131703,
+          "n_samples": 960,
+          "trust_score": 0.8593
+        },
+        {
+          "hospital": "Fortis_National_Hospital",
+          "accuracy": 0.65,
+          "loss": 0.6222405373274038,
+          "n_samples": 480,
+          "trust_score": 0.8133
+        },
+        {
+          "hospital": "District_Rural_Hospital",
+          "accuracy": 0.745,
+          "loss": 0.5772578847035765,
+          "n_samples": 800,
+          "trust_score": 0.7867
+        }
+      ],
+      "avg_accuracy": 0.71125,
+      "avg_loss": 0.592608022307201,
+      "trust_scores": {
+        "Apollo_Private_Hospital": {
+          "hospital_id": "Apollo_Private_Hospital",
+          "trust_score": 0.87,
+          "accuracy_history": [
+            0.92,
+            0.73125,
+            0.7125
+          ],
+          "data_quality_score": 0.92,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:21.903906"
+        },
+        "AIIMS_Government_Hospital": {
+          "hospital_id": "AIIMS_Government_Hospital",
+          "trust_score": 0.8593,
+          "accuracy_history": [
+            0.88,
+            0.7541666666666667,
+            0.7375
+          ],
+          "data_quality_score": 0.88,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:21.943066"
+        },
+        "Fortis_National_Hospital": {
+          "hospital_id": "Fortis_National_Hospital",
+          "trust_score": 0.8133,
+          "accuracy_history": [
+            0.85,
+            0.65,
+            0.65
+          ],
+          "data_quality_score": 0.85,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:21.977025"
+        },
+        "District_Rural_Hospital": {
+          "hospital_id": "District_Rural_Hospital",
+          "trust_score": 0.7867,
+          "accuracy_history": [
+            0.75,
+            0.675,
+            0.745
+          ],
+          "data_quality_score": 0.75,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:22.012509"
+        }
+      },
+      "timestamp": "2026-03-20T15:00:22.013028"
+    },
+    {
+      "round": 3,
+      "disease": "diabetes",
+      "n_hospitals": 4,
+      "hospital_metrics": [
+        {
+          "hospital": "Apollo_Private_Hospital",
+          "accuracy": 0.7,
+          "loss": 0.6031640445813536,
+          "n_samples": 640,
+          "trust_score": 0.859
+        },
+        {
+          "hospital": "AIIMS_Government_Hospital",
+          "accuracy": 0.725,
+          "loss": 0.5566557254642248,
+          "n_samples": 960,
+          "trust_score": 0.8511
+        },
+        {
+          "hospital": "Fortis_National_Hospital",
+          "accuracy": 0.75,
+          "loss": 0.5102428670662145,
+          "n_samples": 480,
+          "trust_score": 0.8175
+        },
+        {
+          "hospital": "District_Rural_Hospital",
+          "accuracy": 0.735,
+          "loss": 0.6595515907183289,
+          "n_samples": 800,
+          "trust_score": 0.7881
+        }
+      ],
+      "avg_accuracy": 0.7274999999999999,
+      "avg_loss": 0.5824035569575305,
+      "trust_scores": {
+        "Apollo_Private_Hospital": {
+          "hospital_id": "Apollo_Private_Hospital",
+          "trust_score": 0.859,
+          "accuracy_history": [
+            0.92,
+            0.73125,
+            0.7125,
+            0.7
+          ],
+          "data_quality_score": 0.92,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:22.346470"
+        },
+        "AIIMS_Government_Hospital": {
+          "hospital_id": "AIIMS_Government_Hospital",
+          "trust_score": 0.8511,
+          "accuracy_history": [
+            0.88,
+            0.7541666666666667,
+            0.7375,
+            0.725
+          ],
+          "data_quality_score": 0.88,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:22.389897"
+        },
+        "Fortis_National_Hospital": {
+          "hospital_id": "Fortis_National_Hospital",
+          "trust_score": 0.8175,
+          "accuracy_history": [
+            0.85,
+            0.65,
+            0.65,
+            0.75
+          ],
+          "data_quality_score": 0.85,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:22.426386"
+        },
+        "District_Rural_Hospital": {
+          "hospital_id": "District_Rural_Hospital",
+          "trust_score": 0.7881,
+          "accuracy_history": [
+            0.75,
+            0.675,
+            0.745,
+            0.735
+          ],
+          "data_quality_score": 0.75,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:22.461870"
+        }
+      },
+      "timestamp": "2026-03-20T15:00:22.462410"
+    },
+    {
+      "round": 4,
+      "disease": "heart_disease",
+      "n_hospitals": 4,
+      "hospital_metrics": [
+        {
+          "hospital": "Apollo_Private_Hospital",
+          "accuracy": 0.59375,
+          "loss": 0.6920723328366876,
+          "n_samples": 640,
+          "trust_score": 0.8418
+        },
+        {
+          "hospital": "AIIMS_Government_Hospital",
+          "accuracy": 0.6083333333333333,
+          "loss": 0.674156996080031,
+          "n_samples": 960,
+          "trust_score": 0.8345
+        },
+        {
+          "hospital": "Fortis_National_Hospital",
+          "accuracy": 0.7416666666666667,
+          "loss": 0.558868711348623,
+          "n_samples": 480,
+          "trust_score": 0.8192
+        },
+        {
+          "hospital": "District_Rural_Hospital",
+          "accuracy": 0.685,
+          "loss": 0.603045343235135,
+          "n_samples": 800,
+          "trust_score": 0.784
+        }
+      ],
+      "avg_accuracy": 0.6571875,
+      "avg_loss": 0.6320358458751192,
+      "trust_scores": {
+        "Apollo_Private_Hospital": {
+          "hospital_id": "Apollo_Private_Hospital",
+          "trust_score": 0.8418,
+          "accuracy_history": [
+            0.92,
+            0.73125,
+            0.7125,
+            0.7,
+            0.59375
+          ],
+          "data_quality_score": 0.92,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:22.791567"
+        },
+        "AIIMS_Government_Hospital": {
+          "hospital_id": "AIIMS_Government_Hospital",
+          "trust_score": 0.8345,
+          "accuracy_history": [
+            0.88,
+            0.7541666666666667,
+            0.7375,
+            0.725,
+            0.6083333333333333
+          ],
+          "data_quality_score": 0.88,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:22.829681"
+        },
+        "Fortis_National_Hospital": {
+          "hospital_id": "Fortis_National_Hospital",
+          "trust_score": 0.8192,
+          "accuracy_history": [
+            0.85,
+            0.65,
+            0.65,
+            0.75,
+            0.7416666666666667
+          ],
+          "data_quality_score": 0.85,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:22.865642"
+        },
+        "District_Rural_Hospital": {
+          "hospital_id": "District_Rural_Hospital",
+          "trust_score": 0.784,
+          "accuracy_history": [
+            0.75,
+            0.675,
+            0.745,
+            0.735,
+            0.685
+          ],
+          "data_quality_score": 0.75,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:22.903379"
+        }
+      },
+      "timestamp": "2026-03-20T15:00:22.904064"
+    },
+    {
+      "round": 5,
+      "disease": "heart_disease",
+      "n_hospitals": 4,
+      "hospital_metrics": [
+        {
+          "hospital": "Apollo_Private_Hospital",
+          "accuracy": 0.575,
+          "loss": 0.7322907578200102,
+          "n_samples": 640,
+          "trust_score": 0.8072
+        },
+        {
+          "hospital": "AIIMS_Government_Hospital",
+          "accuracy": 0.6458333333333334,
+          "loss": 0.6258721815422177,
+          "n_samples": 960,
+          "trust_score": 0.8111
+        },
+        {
+          "hospital": "Fortis_National_Hospital",
+          "accuracy": 0.6083333333333333,
+          "loss": 0.6153064203448594,
+          "n_samples": 480,
+          "trust_score": 0.795
+        },
+        {
+          "hospital": "District_Rural_Hospital",
+          "accuracy": 0.68,
+          "loss": 0.6287545408308506,
+          "n_samples": 800,
+          "trust_score": 0.777
+        }
+      ],
+      "avg_accuracy": 0.6272916666666667,
+      "avg_loss": 0.6505559751344845,
+      "trust_scores": {
+        "Apollo_Private_Hospital": {
+          "hospital_id": "Apollo_Private_Hospital",
+          "trust_score": 0.8072,
+          "accuracy_history": [
+            0.92,
+            0.73125,
+            0.7125,
+            0.7,
+            0.59375,
+            0.575
+          ],
+          "data_quality_score": 0.92,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:23.232934"
+        },
+        "AIIMS_Government_Hospital": {
+          "hospital_id": "AIIMS_Government_Hospital",
+          "trust_score": 0.8111,
+          "accuracy_history": [
+            0.88,
+            0.7541666666666667,
+            0.7375,
+            0.725,
+            0.6083333333333333,
+            0.6458333333333334
+          ],
+          "data_quality_score": 0.88,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:23.270962"
+        },
+        "Fortis_National_Hospital": {
+          "hospital_id": "Fortis_National_Hospital",
+          "trust_score": 0.795,
+          "accuracy_history": [
+            0.85,
+            0.65,
+            0.65,
+            0.75,
+            0.7416666666666667,
+            0.6083333333333333
+          ],
+          "data_quality_score": 0.85,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:23.308423"
+        },
+        "District_Rural_Hospital": {
+          "hospital_id": "District_Rural_Hospital",
+          "trust_score": 0.777,
+          "accuracy_history": [
+            0.75,
+            0.675,
+            0.745,
+            0.735,
+            0.685,
+            0.68
+          ],
+          "data_quality_score": 0.75,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:23.345624"
+        }
+      },
+      "timestamp": "2026-03-20T15:00:23.346231"
+    },
+    {
+      "round": 6,
+      "disease": "heart_disease",
+      "n_hospitals": 4,
+      "hospital_metrics": [
+        {
+          "hospital": "Apollo_Private_Hospital",
+          "accuracy": 0.6625,
+          "loss": 0.5936409013811499,
+          "n_samples": 640,
+          "trust_score": 0.8004
+        },
+        {
+          "hospital": "AIIMS_Government_Hospital",
+          "accuracy": 0.6208333333333333,
+          "loss": 0.6386354734189809,
+          "n_samples": 960,
+          "trust_score": 0.7978
+        },
+        {
+          "hospital": "Fortis_National_Hospital",
+          "accuracy": 0.6666666666666666,
+          "loss": 0.641070774383843,
+          "n_samples": 480,
+          "trust_score": 0.7967
+        },
+        {
+          "hospital": "District_Rural_Hospital",
+          "accuracy": 0.65,
+          "loss": 0.655532677769661,
+          "n_samples": 800,
+          "trust_score": 0.7745
+        }
+      ],
+      "avg_accuracy": 0.6499999999999999,
+      "avg_loss": 0.6322199567384086,
+      "trust_scores": {
+        "Apollo_Private_Hospital": {
+          "hospital_id": "Apollo_Private_Hospital",
+          "trust_score": 0.8004,
+          "accuracy_history": [
+            0.92,
+            0.73125,
+            0.7125,
+            0.7,
+            0.59375,
+            0.575,
+            0.6625
+          ],
+          "data_quality_score": 0.92,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:23.687494"
+        },
+        "AIIMS_Government_Hospital": {
+          "hospital_id": "AIIMS_Government_Hospital",
+          "trust_score": 0.7978,
+          "accuracy_history": [
+            0.88,
+            0.7541666666666667,
+            0.7375,
+            0.725,
+            0.6083333333333333,
+            0.6458333333333334,
+            0.6208333333333333
+          ],
+          "data_quality_score": 0.88,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:23.723259"
+        },
+        "Fortis_National_Hospital": {
+          "hospital_id": "Fortis_National_Hospital",
+          "trust_score": 0.7967,
+          "accuracy_history": [
+            0.85,
+            0.65,
+            0.65,
+            0.75,
+            0.7416666666666667,
+            0.6083333333333333,
+            0.6666666666666666
+          ],
+          "data_quality_score": 0.85,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:23.756089"
+        },
+        "District_Rural_Hospital": {
+          "hospital_id": "District_Rural_Hospital",
+          "trust_score": 0.7745,
+          "accuracy_history": [
+            0.75,
+            0.675,
+            0.745,
+            0.735,
+            0.685,
+            0.68,
+            0.65
+          ],
+          "data_quality_score": 0.75,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:23.793277"
+        }
+      },
+      "timestamp": "2026-03-20T15:00:23.793779"
+    },
+    {
+      "round": 7,
+      "disease": "liver_disease",
+      "n_hospitals": 4,
+      "hospital_metrics": [
+        {
+          "hospital": "Apollo_Private_Hospital",
+          "accuracy": 0.61875,
+          "loss": 0.6557303143665194,
+          "n_samples": 640,
+          "trust_score": 0.791
+        },
+        {
+          "hospital": "AIIMS_Government_Hospital",
+          "accuracy": 0.6041666666666666,
+          "loss": 0.6512722410261631,
+          "n_samples": 960,
+          "trust_score": 0.7844
+        },
+        {
+          "hospital": "Fortis_National_Hospital",
+          "accuracy": 0.6166666666666667,
+          "loss": 0.6867817129939795,
+          "n_samples": 480,
+          "trust_score": 0.7933
+        },
+        {
+          "hospital": "District_Rural_Hospital",
+          "accuracy": 0.575,
+          "loss": 0.6854526146501303,
+          "n_samples": 800,
+          "trust_score": 0.7575
+        }
+      ],
+      "avg_accuracy": 0.6036458333333333,
+      "avg_loss": 0.6698092207591981,
+      "trust_scores": {
+        "Apollo_Private_Hospital": {
+          "hospital_id": "Apollo_Private_Hospital",
+          "trust_score": 0.791,
+          "accuracy_history": [
+            0.92,
+            0.73125,
+            0.7125,
+            0.7,
+            0.59375,
+            0.575,
+            0.6625,
+            0.61875
+          ],
+          "data_quality_score": 0.92,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:24.128247"
+        },
+        "AIIMS_Government_Hospital": {
+          "hospital_id": "AIIMS_Government_Hospital",
+          "trust_score": 0.7844,
+          "accuracy_history": [
+            0.88,
+            0.7541666666666667,
+            0.7375,
+            0.725,
+            0.6083333333333333,
+            0.6458333333333334,
+            0.6208333333333333,
+            0.6041666666666666
+          ],
+          "data_quality_score": 0.88,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:24.166388"
+        },
+        "Fortis_National_Hospital": {
+          "hospital_id": "Fortis_National_Hospital",
+          "trust_score": 0.7933,
+          "accuracy_history": [
+            0.85,
+            0.65,
+            0.65,
+            0.75,
+            0.7416666666666667,
+            0.6083333333333333,
+            0.6666666666666666,
+            0.6166666666666667
+          ],
+          "data_quality_score": 0.85,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:24.201293"
+        },
+        "District_Rural_Hospital": {
+          "hospital_id": "District_Rural_Hospital",
+          "trust_score": 0.7575,
+          "accuracy_history": [
+            0.75,
+            0.675,
+            0.745,
+            0.735,
+            0.685,
+            0.68,
+            0.65,
+            0.575
+          ],
+          "data_quality_score": 0.75,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:24.237476"
+        }
+      },
+      "timestamp": "2026-03-20T15:00:24.238104"
+    },
+    {
+      "round": 8,
+      "disease": "liver_disease",
+      "n_hospitals": 4,
+      "hospital_metrics": [
+        {
+          "hospital": "Apollo_Private_Hospital",
+          "accuracy": 0.575,
+          "loss": 0.7012890073470771,
+          "n_samples": 640,
+          "trust_score": 0.7785
+        },
+        {
+          "hospital": "AIIMS_Government_Hospital",
+          "accuracy": 0.6333333333333333,
+          "loss": 0.6633815281714003,
+          "n_samples": 960,
+          "trust_score": 0.7752
+        },
+        {
+          "hospital": "Fortis_National_Hospital",
+          "accuracy": 0.5833333333333334,
+          "loss": 0.6834464948624372,
+          "n_samples": 480,
+          "trust_score": 0.7767
+        },
+        {
+          "hospital": "District_Rural_Hospital",
+          "accuracy": 0.56,
+          "loss": 0.6989145136624575,
+          "n_samples": 800,
+          "trust_score": 0.74
+        }
+      ],
+      "avg_accuracy": 0.5879166666666666,
+      "avg_loss": 0.686757886010843,
+      "trust_scores": {
+        "Apollo_Private_Hospital": {
+          "hospital_id": "Apollo_Private_Hospital",
+          "trust_score": 0.7785,
+          "accuracy_history": [
+            0.92,
+            0.73125,
+            0.7125,
+            0.7,
+            0.59375,
+            0.575,
+            0.6625,
+            0.61875,
+            0.575
+          ],
+          "data_quality_score": 0.92,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:24.570105"
+        },
+        "AIIMS_Government_Hospital": {
+          "hospital_id": "AIIMS_Government_Hospital",
+          "trust_score": 0.7752,
+          "accuracy_history": [
+            0.88,
+            0.7541666666666667,
+            0.7375,
+            0.725,
+            0.6083333333333333,
+            0.6458333333333334,
+            0.6208333333333333,
+            0.6041666666666666,
+            0.6333333333333333
+          ],
+          "data_quality_score": 0.88,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:24.606441"
+        },
+        "Fortis_National_Hospital": {
+          "hospital_id": "Fortis_National_Hospital",
+          "trust_score": 0.7767,
+          "accuracy_history": [
+            0.85,
+            0.65,
+            0.65,
+            0.75,
+            0.7416666666666667,
+            0.6083333333333333,
+            0.6666666666666666,
+            0.6166666666666667,
+            0.5833333333333334
+          ],
+          "data_quality_score": 0.85,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:24.640336"
+        },
+        "District_Rural_Hospital": {
+          "hospital_id": "District_Rural_Hospital",
+          "trust_score": 0.74,
+          "accuracy_history": [
+            0.75,
+            0.675,
+            0.745,
+            0.735,
+            0.685,
+            0.68,
+            0.65,
+            0.575,
+            0.56
+          ],
+          "data_quality_score": 0.75,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:24.679568"
+        }
+      },
+      "timestamp": "2026-03-20T15:00:24.680212"
+    },
+    {
+      "round": 9,
+      "disease": "liver_disease",
+      "n_hospitals": 4,
+      "hospital_metrics": [
+        {
+          "hospital": "Apollo_Private_Hospital",
+          "accuracy": 0.525,
+          "loss": 0.7191623048856854,
+          "n_samples": 640,
+          "trust_score": 0.7716
+        },
+        {
+          "hospital": "AIIMS_Government_Hospital",
+          "accuracy": 0.5625,
+          "loss": 0.6933370560407639,
+          "n_samples": 960,
+          "trust_score": 0.7707
+        },
+        {
+          "hospital": "Fortis_National_Hospital",
+          "accuracy": 0.6083333333333333,
+          "loss": 0.6782832009096941,
+          "n_samples": 480,
+          "trust_score": 0.7633
+        },
+        {
+          "hospital": "District_Rural_Hospital",
+          "accuracy": 0.63,
+          "loss": 0.6598576854541898,
+          "n_samples": 800,
+          "trust_score": 0.7345
+        }
+      ],
+      "avg_accuracy": 0.5814583333333333,
+      "avg_loss": 0.6876600618225832,
+      "trust_scores": {
+        "Apollo_Private_Hospital": {
+          "hospital_id": "Apollo_Private_Hospital",
+          "trust_score": 0.7716,
+          "accuracy_history": [
+            0.92,
+            0.73125,
+            0.7125,
+            0.7,
+            0.59375,
+            0.575,
+            0.6625,
+            0.61875,
+            0.575,
+            0.525
+          ],
+          "data_quality_score": 0.92,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:25.011630"
+        },
+        "AIIMS_Government_Hospital": {
+          "hospital_id": "AIIMS_Government_Hospital",
+          "trust_score": 0.7707,
+          "accuracy_history": [
+            0.88,
+            0.7541666666666667,
+            0.7375,
+            0.725,
+            0.6083333333333333,
+            0.6458333333333334,
+            0.6208333333333333,
+            0.6041666666666666,
+            0.6333333333333333,
+            0.5625
+          ],
+          "data_quality_score": 0.88,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:25.046585"
+        },
+        "Fortis_National_Hospital": {
+          "hospital_id": "Fortis_National_Hospital",
+          "trust_score": 0.7633,
+          "accuracy_history": [
+            0.85,
+            0.65,
+            0.65,
+            0.75,
+            0.7416666666666667,
+            0.6083333333333333,
+            0.6666666666666666,
+            0.6166666666666667,
+            0.5833333333333334,
+            0.6083333333333333
+          ],
+          "data_quality_score": 0.85,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:25.083279"
+        },
+        "District_Rural_Hospital": {
+          "hospital_id": "District_Rural_Hospital",
+          "trust_score": 0.7345,
+          "accuracy_history": [
+            0.75,
+            0.675,
+            0.745,
+            0.735,
+            0.685,
+            0.68,
+            0.65,
+            0.575,
+            0.56,
+            0.63
+          ],
+          "data_quality_score": 0.75,
+          "participation_rate": 1.0,
+          "anomaly_count": 0,
+          "last_updated": "2026-03-20T15:00:25.120304"
+        }
+      },
+      "timestamp": "2026-03-20T15:00:25.120978"
+    }
+  ],
+  "fl_logs": [
+    {
+      "round": 1,
+      "tier1": {
+        "Apollo_Private_Hospital": {
+          "accuracy": 0.73125,
+          "loss": 0.5652742079924792,
+          "n_samples": 640
+        },
+        "AIIMS_Government_Hospital": {
+          "accuracy": 0.7541666666666667,
+          "loss": 0.5196553773091485,
+          "n_samples": 960
+        },
+        "Fortis_National_Hospital": {
+          "accuracy": 0.65,
+          "loss": 0.6672193869017065,
+          "n_samples": 480
+        },
+        "District_Rural_Hospital": {
+          "accuracy": 0.675,
+          "loss": 0.6216373672336339,
+          "n_samples": 800
+        }
+      },
+      "tier2": {
+        "Telangana": {
+          "avg_accuracy": 0.73125,
+          "n_hospitals": 1
+        },
+        "Delhi": {
+          "avg_accuracy": 0.7541666666666667,
+          "n_hospitals": 1
+        },
+        "Punjab": {
+          "avg_accuracy": 0.65,
+          "n_hospitals": 1
+        },
+        "Bihar": {
+          "avg_accuracy": 0.675,
+          "n_hospitals": 1
+        }
+      },
+      "timestamp": "2026-03-20T15:00:21.553970"
+    },
+    {
+      "round": 2,
+      "tier1": {
+        "Apollo_Private_Hospital": {
+          "accuracy": 0.7125,
+          "loss": 0.6192689146846533,
+          "n_samples": 640
+        },
+        "AIIMS_Government_Hospital": {
+          "accuracy": 0.7375,
+          "loss": 0.5516647525131703,
+          "n_samples": 960
+        },
+        "Fortis_National_Hospital": {
+          "accuracy": 0.65,
+          "loss": 0.6222405373274038,
+          "n_samples": 480
+        },
+        "District_Rural_Hospital": {
+          "accuracy": 0.745,
+          "loss": 0.5772578847035765,
+          "n_samples": 800
+        }
+      },
+      "tier2": {
+        "Telangana": {
+          "avg_accuracy": 0.7125,
+          "n_hospitals": 1
+        },
+        "Delhi": {
+          "avg_accuracy": 0.7375,
+          "n_hospitals": 1
+        },
+        "Punjab": {
+          "avg_accuracy": 0.65,
+          "n_hospitals": 1
+        },
+        "Bihar": {
+          "avg_accuracy": 0.745,
+          "n_hospitals": 1
+        }
+      },
+      "timestamp": "2026-03-20T15:00:22.013113"
+    },
+    {
+      "round": 3,
+      "tier1": {
+        "Apollo_Private_Hospital": {
+          "accuracy": 0.7,
+          "loss": 0.6031640445813536,
+          "n_samples": 640
+        },
+        "AIIMS_Government_Hospital": {
+          "accuracy": 0.725,
+          "loss": 0.5566557254642248,
+          "n_samples": 960
+        },
+        "Fortis_National_Hospital": {
+          "accuracy": 0.75,
+          "loss": 0.5102428670662145,
+          "n_samples": 480
+        },
+        "District_Rural_Hospital": {
+          "accuracy": 0.735,
+          "loss": 0.6595515907183289,
+          "n_samples": 800
+        }
+      },
+      "tier2": {
+        "Telangana": {
+          "avg_accuracy": 0.7,
+          "n_hospitals": 1
+        },
+        "Delhi": {
+          "avg_accuracy": 0.725,
+          "n_hospitals": 1
+        },
+        "Punjab": {
+          "avg_accuracy": 0.75,
+          "n_hospitals": 1
+        },
+        "Bihar": {
+          "avg_accuracy": 0.735,
+          "n_hospitals": 1
+        }
+      },
+      "timestamp": "2026-03-20T15:00:22.462473"
+    },
+    {
+      "round": 1,
+      "tier1": {
+        "Apollo_Private_Hospital": {
+          "accuracy": 0.625,
+          "loss": 0.6884504086803644,
+          "n_samples": 640
+        },
+        "AIIMS_Government_Hospital": {
+          "accuracy": 0.6291666666666667,
+          "loss": 0.6883010063009958,
+          "n_samples": 960
+        },
+        "Fortis_National_Hospital": {
+          "accuracy": 0.65,
+          "loss": 0.6306348769615094,
+          "n_samples": 480
+        },
+        "District_Rural_Hospital": {
+          "accuracy": 0.65,
+          "loss": 0.6224261627718807,
+          "n_samples": 800
+        }
+      },
+      "tier2": {
+        "Telangana": {
+          "avg_accuracy": 0.59375,
+          "n_hospitals": 1
+        },
+        "Delhi": {
+          "avg_accuracy": 0.6083333333333333,
+          "n_hospitals": 1
+        },
+        "Punjab": {
+          "avg_accuracy": 0.7416666666666667,
+          "n_hospitals": 1
+        },
+        "Bihar": {
+          "avg_accuracy": 0.685,
+          "n_hospitals": 1
+        }
+      },
+      "timestamp": "2026-03-20T15:00:22.904128"
+    },
+    {
+      "round": 2,
+      "tier1": {
+        "Apollo_Private_Hospital": {
+          "accuracy": 0.58125,
+          "loss": 0.695935626141727,
+          "n_samples": 640
+        },
+        "AIIMS_Government_Hospital": {
+          "accuracy": 0.6291666666666667,
+          "loss": 0.6593096306547522,
+          "n_samples": 960
+        },
+        "Fortis_National_Hospital": {
+          "accuracy": 0.6583333333333333,
+          "loss": 0.6409955641254783,
+          "n_samples": 480
+        },
+        "District_Rural_Hospital": {
+          "accuracy": 0.605,
+          "loss": 0.7002469614893198,
+          "n_samples": 800
+        }
+      },
+      "tier2": {
+        "Telangana": {
+          "avg_accuracy": 0.575,
+          "n_hospitals": 1
+        },
+        "Delhi": {
+          "avg_accuracy": 0.6458333333333334,
+          "n_hospitals": 1
+        },
+        "Punjab": {
+          "avg_accuracy": 0.6083333333333333,
+          "n_hospitals": 1
+        },
+        "Bihar": {
+          "avg_accuracy": 0.68,
+          "n_hospitals": 1
+        }
+      },
+      "timestamp": "2026-03-20T15:00:23.346323"
+    },
+    {
+      "round": 3,
+      "tier1": {
+        "Apollo_Private_Hospital": {
+          "accuracy": 0.60625,
+          "loss": 0.6786305238492787,
+          "n_samples": 640
+        },
+        "AIIMS_Government_Hospital": {
+          "accuracy": 0.6,
+          "loss": 0.7000698730659981,
+          "n_samples": 960
+        },
+        "Fortis_National_Hospital": {
+          "accuracy": 0.6833333333333333,
+          "loss": 0.6050253331350783,
+          "n_samples": 480
+        },
+        "District_Rural_Hospital": {
+          "accuracy": 0.665,
+          "loss": 0.645276688747108,
+          "n_samples": 800
+        }
+      },
+      "tier2": {
+        "Telangana": {
+          "avg_accuracy": 0.6625,
+          "n_hospitals": 1
+        },
+        "Delhi": {
+          "avg_accuracy": 0.6208333333333333,
+          "n_hospitals": 1
+        },
+        "Punjab": {
+          "avg_accuracy": 0.6666666666666666,
+          "n_hospitals": 1
+        },
+        "Bihar": {
+          "avg_accuracy": 0.65,
+          "n_hospitals": 1
+        }
+      },
+      "timestamp": "2026-03-20T15:00:23.793869"
+    },
+    {
+      "round": 1,
+      "tier1": {
+        "Apollo_Private_Hospital": {
+          "accuracy": 0.56875,
+          "loss": 0.6882473906036466,
+          "n_samples": 640
+        },
+        "AIIMS_Government_Hospital": {
+          "accuracy": 0.575,
+          "loss": 0.7084491921588778,
+          "n_samples": 960
+        },
+        "Fortis_National_Hospital": {
+          "accuracy": 0.65,
+          "loss": 0.6667345429460207,
+          "n_samples": 480
+        },
+        "District_Rural_Hospital": {
+          "accuracy": 0.66,
+          "loss": 0.6536799200624227,
+          "n_samples": 800
+        }
+      },
+      "tier2": {
+        "Telangana": {
+          "avg_accuracy": 0.61875,
+          "n_hospitals": 1
+        },
+        "Delhi": {
+          "avg_accuracy": 0.6041666666666666,
+          "n_hospitals": 1
+        },
+        "Punjab": {
+          "avg_accuracy": 0.6166666666666667,
+          "n_hospitals": 1
+        },
+        "Bihar": {
+          "avg_accuracy": 0.575,
+          "n_hospitals": 1
+        }
+      },
+      "timestamp": "2026-03-20T15:00:24.238201"
+    },
+    {
+      "round": 2,
+      "tier1": {
+        "Apollo_Private_Hospital": {
+          "accuracy": 0.55,
+          "loss": 0.7002204606775194,
+          "n_samples": 640
+        },
+        "AIIMS_Government_Hospital": {
+          "accuracy": 0.6,
+          "loss": 0.6719637505710125,
+          "n_samples": 960
+        },
+        "Fortis_National_Hospital": {
+          "accuracy": 0.625,
+          "loss": 0.6621752609188358,
+          "n_samples": 480
+        },
+        "District_Rural_Hospital": {
+          "accuracy": 0.59,
+          "loss": 0.6925845819711686,
+          "n_samples": 800
+        }
+      },
+      "tier2": {
+        "Telangana": {
+          "avg_accuracy": 0.575,
+          "n_hospitals": 1
+        },
+        "Delhi": {
+          "avg_accuracy": 0.6333333333333333,
+          "n_hospitals": 1
+        },
+        "Punjab": {
+          "avg_accuracy": 0.5833333333333334,
+          "n_hospitals": 1
+        },
+        "Bihar": {
+          "avg_accuracy": 0.56,
+          "n_hospitals": 1
+        }
+      },
+      "timestamp": "2026-03-20T15:00:24.680283"
+    },
+    {
+      "round": 3,
+      "tier1": {
+        "Apollo_Private_Hospital": {
+          "accuracy": 0.55,
+          "loss": 0.6802346172276884,
+          "n_samples": 640
+        },
+        "AIIMS_Government_Hospital": {
+          "accuracy": 0.5541666666666667,
+          "loss": 0.6902688769002755,
+          "n_samples": 960
+        },
+        "Fortis_National_Hospital": {
+          "accuracy": 0.6416666666666667,
+          "loss": 0.6255630386993289,
+          "n_samples": 480
+        },
+        "District_Rural_Hospital": {
+          "accuracy": 0.64,
+          "loss": 0.631988935880363,
+          "n_samples": 800
+        }
+      },
+      "tier2": {
+        "Telangana": {
+          "avg_accuracy": 0.525,
+          "n_hospitals": 1
+        },
+        "Delhi": {
+          "avg_accuracy": 0.5625,
+          "n_hospitals": 1
+        },
+        "Punjab": {
+          "avg_accuracy": 0.6083333333333333,
+          "n_hospitals": 1
+        },
+        "Bihar": {
+          "avg_accuracy": 0.63,
+          "n_hospitals": 1
+        }
+      },
+      "timestamp": "2026-03-20T15:00:25.121063"
+    }
+  ],
+  "generated_at": "2026-03-20T15:00:25.121292"
+}

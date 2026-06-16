@@ -1,0 +1,50 @@
+{
+  "Apollo_Private_Hospital": {
+    "total_patients": 800,
+    "avg_age": 44.5,
+    "diabetes_prevalence": 27.1,
+    "heart_disease_prevalence": 52.4,
+    "liver_disease_prevalence": 30.5,
+    "avg_bmi": 27.0,
+    "avg_glucose": 105.9,
+    "avg_cholesterol": 230.3,
+    "hypertension_rate": 85.0,
+    "smoker_rate": 25.2
+  },
+  "AIIMS_Government_Hospital": {
+    "total_patients": 1200,
+    "avg_age": 44.5,
+    "diabetes_prevalence": 28.2,
+    "heart_disease_prevalence": 54.3,
+    "liver_disease_prevalence": 29.8,
+    "avg_bmi": 27.0,
+    "avg_glucose": 107.1,
+    "avg_cholesterol": 230.7,
+    "hypertension_rate": 82.5,
+    "smoker_rate": 21.2
+  },
+  "Fortis_National_Hospital": {
+    "total_patients": 600,
+    "avg_age": 45.2,
+    "diabetes_prevalence": 27.3,
+    "heart_disease_prevalence": 56.5,
+    "liver_disease_prevalence": 31.2,
+    "avg_bmi": 27.1,
+    "avg_glucose": 106.8,
+    "avg_cholesterol": 232.1,
+    "hypertension_rate": 84.2,
+    "smoker_rate": 24.3
+  },
+  "District_Rural_Hospital": {
+    "total_patients": 1000,
+    "avg_age": 45.1,
+    "diabetes_prevalence": 27.7,
+    "heart_disease_prevalence": 52.1,
+    "liver_disease_prevalence": 29.3,
+    "avg_bmi": 26.8,
+    "avg_glucose": 106.5,
+    "avg_cholesterol": 230.7,
+    "hypertension_rate": 83.4,
+    "smoker_rate": 24.4
+  }
+}

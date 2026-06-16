@@ -1,0 +1,298 @@
+{
+  "Apollo_Private_Hospital": {
+    "diabetes": {
+      "metrics": {
+        "accuracy": 0.7625,
+        "precision": 0.5714,
+        "recall": 0.4651,
+        "f1": 0.5128,
+        "auc_roc": 0.6879
+      },
+      "feature_importance": {
+        "fasting_glucose": 0.07024426013231277,
+        "hba1c": 0.06631708145141602,
+        "family_history_diabetes": 0.0526522658765316,
+        "diet": 0.038533274084329605,
+        "bmi": 0.03562626242637634,
+        "heart_rate": 0.03534360229969025,
+        "respiratory_rate": 0.03499997407197952,
+        "diastolic_bp": 0.03362690284848213,
+        "gender": 0.032810356467962265,
+        "alkaline_phosphatase": 0.0305851511657238,
+        "smoking_status": 0.03032911755144596,
+        "exercise_level": 0.02993861585855484
+      },
+      "n_samples": 640
+    },
+    "heart_disease": {
+      "metrics": {
+        "accuracy": 0.65,
+        "precision": 0.6522,
+        "recall": 0.7143,
+        "f1": 0.6818,
+        "auc_roc": 0.6736
+      },
+      "feature_importance": {
+        "ldl_cholesterol": 0.053082313388586044,
+        "age": 0.049073558300733566,
+        "hba1c": 0.036396387964487076,
+        "smoking_status": 0.035106461495161057,
+        "total_cholesterol": 0.03503281995654106,
+        "systolic_bp": 0.03497946262359619,
+        "diastolic_bp": 0.032186321914196014,
+        "alcohol_status": 0.031625326722860336,
+        "socioeconomic_score": 0.031038714572787285,
+        "spo2": 0.030537107959389687,
+        "gender": 0.02996629849076271,
+        "respiratory_rate": 0.029410194605588913
+      },
+      "n_samples": 640
+    },
+    "liver_disease": {
+      "metrics": {
+        "accuracy": 0.7,
+        "precision": 0.5143,
+        "recall": 0.3673,
+        "f1": 0.4286,
+        "auc_roc": 0.633
+      },
+      "feature_importance": {
+        "alcohol_status": 0.07261954993009567,
+        "family_history_liver": 0.05010553449392319,
+        "sgot": 0.03746001794934273,
+        "family_history_diabetes": 0.036123231053352356,
+        "creatinine": 0.03386198356747627,
+        "bmi": 0.033379293978214264,
+        "sgpt": 0.03197720646858215,
+        "socioeconomic_score": 0.029719626531004906,
+        "ldl_cholesterol": 0.029012486338615417,
+        "diet": 0.028786437585949898,
+        "systolic_bp": 0.028455311432480812,
+        "exercise_level": 0.028255246579647064
+      },
+      "n_samples": 640
+    }
+  },
+  "AIIMS_Government_Hospital": {
+    "diabetes": {
+      "metrics": {
+        "accuracy": 0.725,
+        "precision": 0.5156,
+        "recall": 0.4853,
+        "f1": 0.5,
+        "auc_roc": 0.6707
+      },
+      "feature_importance": {
+        "fasting_glucose": 0.08187747746706009,
+        "hba1c": 0.07533086836338043,
+        "family_history_diabetes": 0.07049866020679474,
+        "bmi": 0.03527392819523811,
+        "exercise_level": 0.031088508665561676,
+        "gender": 0.029635142534971237,
+        "socioeconomic_score": 0.02843465656042099,
+        "age": 0.028116103261709213,
+        "bilirubin_total": 0.028114039450883865,
+        "diet": 0.02696351334452629,
+        "hemoglobin": 0.026761889457702637,
+        "ldl_cholesterol": 0.026643916964530945
+      },
+      "n_samples": 960
+    },
+    "heart_disease": {
+      "metrics": {
+        "accuracy": 0.6833,
+        "precision": 0.6957,
+        "recall": 0.7385,
+        "f1": 0.7164,
+        "auc_roc": 0.7211
+      },
+      "feature_importance": {
+        "ldl_cholesterol": 0.06328645348548889,
+        "family_history_heart": 0.046026989817619324,
+        "family_history_liver": 0.04431844875216484,
+        "total_cholesterol": 0.03780590370297432,
+        "hba1c": 0.03501233458518982,
+        "age": 0.0345054566860199,
+        "smoking_status": 0.034302957355976105,
+        "systolic_bp": 0.03386053070425987,
+        "creatinine": 0.02988637425005436,
+        "platelet_count": 0.028209829702973366,
+        "bilirubin_total": 0.028044402599334717,
+        "hdl_cholesterol": 0.02762458845973015
+      },
+      "n_samples": 960
+    },
+    "liver_disease": {
+      "metrics": {
+        "accuracy": 0.7208,
+        "precision": 0.5472,
+        "recall": 0.4028,
+        "f1": 0.464,
+        "auc_roc": 0.6613
+      },
+      "feature_importance": {
+        "alcohol_status": 0.09638223052024841,
+        "family_history_liver": 0.06260319799184799,
+        "sgpt": 0.041235387325286865,
+        "sgot": 0.039185795933008194,
+        "bilirubin_total": 0.0343550480902195,
+        "gender": 0.028956765308976173,
+        "urea": 0.028367582708597183,
+        "socioeconomic_score": 0.02836035005748272,
+        "hba1c": 0.028108028694987297,
+        "insulin": 0.028036128729581833,
+        "bmi": 0.02778852917253971,
+        "family_history_diabetes": 0.027471447363495827
+      },
+      "n_samples": 960
+    }
+  },
+  "Fortis_National_Hospital": {
+    "diabetes": {
+      "metrics": {
+        "accuracy": 0.7167,
+        "precision": 0.4783,
+        "recall": 0.3333,
+        "f1": 0.3929,
+        "auc_roc": 0.7405
+      },
+      "feature_importance": {
+        "family_history_diabetes": 0.12223285436630249,
+        "hba1c": 0.059601590037345886,
+        "fasting_glucose": 0.05792281776666641,
+        "smoking_status": 0.03653459995985031,
+        "albumin": 0.033870816230773926,
+        "gender": 0.03280956298112869,
+        "urea": 0.030739765614271164,
+        "exercise_level": 0.02894473820924759,
+        "uric_acid": 0.028654832392930984,
+        "bilirubin_total": 0.02722848765552044,
+        "bmi": 0.02638936974108219,
+        "sgpt": 0.0255909264087677
+      },
+      "n_samples": 480
+    },
+    "heart_disease": {
+      "metrics": {
+        "accuracy": 0.625,
+        "precision": 0.662,
+        "recall": 0.6912,
+        "f1": 0.6763,
+        "auc_roc": 0.6572
+      },
+      "feature_importance": {
+        "smoking_status": 0.06808090955018997,
+        "ldl_cholesterol": 0.05372347682714462,
+        "family_history_heart": 0.041116129606962204,
+        "systolic_bp": 0.03619757667183876,
+        "albumin": 0.0354602076113224,
+        "family_history_diabetes": 0.03498644381761551,
+        "total_cholesterol": 0.03493582829833031,
+        "urea": 0.033843621611595154,
+        "gender": 0.030946608632802963,
+        "bmi": 0.030713103711605072,
+        "respiratory_rate": 0.03047787770628929,
+        "socioeconomic_score": 0.0298321433365345
+      },
+      "n_samples": 480
+    },
+    "liver_disease": {
+      "metrics": {
+        "accuracy": 0.6667,
+        "precision": 0.4483,
+        "recall": 0.3514,
+        "f1": 0.3939,
+        "auc_roc": 0.6109
+      },
+      "feature_importance": {
+        "alcohol_status": 0.05233342573046684,
+        "sgot": 0.04152783006429672,
+        "fasting_glucose": 0.04031577333807945,
+        "sgpt": 0.03953436762094498,
+        "hdl_cholesterol": 0.034581322222948074,
+        "temperature": 0.0344715379178524,
+        "creatinine": 0.03276010975241661,
+        "systolic_bp": 0.03259927034378052,
+        "respiratory_rate": 0.03209622949361801,
+        "socioeconomic_score": 0.0320916548371315,
+        "ldl_cholesterol": 0.031542763113975525,
+        "insulin": 0.03141798824071884
+      },
+      "n_samples": 480
+    }
+  },
+  "District_Rural_Hospital": {
+    "diabetes": {
+      "metrics": {
+        "accuracy": 0.765,
+        "precision": 0.5952,
+        "recall": 0.4545,
+        "f1": 0.5155,
+        "auc_roc": 0.7304
+      },
+      "feature_importance": {
+        "fasting_glucose": 0.0654749944806099,
+        "hba1c": 0.06287068873643875,
+        "family_history_diabetes": 0.0494714081287384,
+        "smoking_status": 0.03854481875896454,
+        "age": 0.038020119071006775,
+        "family_history_heart": 0.03549468144774437,
+        "socioeconomic_score": 0.03107570670545101,
+        "respiratory_rate": 0.030536673963069916,
+        "alcohol_status": 0.030322981998324394,
+        "sgpt": 0.029963890090584755,
+        "bmi": 0.02925737015902996,
+        "alkaline_phosphatase": 0.028474504128098488
+      },
+      "n_samples": 800
+    },
+    "heart_disease": {
+      "metrics": {
+        "accuracy": 0.665,
+        "precision": 0.6697,
+        "recall": 0.7019,
+        "f1": 0.6854,
+        "auc_roc": 0.7634
+      },
+      "feature_importance": {
+        "smoking_status": 0.0655728280544281,
+        "ldl_cholesterol": 0.055653367191553116,
+        "family_history_heart": 0.04594162479043007,
+        "bmi": 0.036248642951250076,
+        "platelet_count": 0.03497479856014252,
+        "systolic_bp": 0.03319448605179787,
+        "age": 0.03274277597665787,
+        "urea": 0.031705621629953384,
+        "triglycerides": 0.030878685414791107,
+        "uric_acid": 0.030392374843358994,
+        "alkaline_phosphatase": 0.029955999925732613,
+        "respiratory_rate": 0.02972411923110485
+      },
+      "n_samples": 800
+    },
+    "liver_disease": {
+      "metrics": {
+        "accuracy": 0.635,
+        "precision": 0.3542,
+        "recall": 0.2881,
+        "f1": 0.3178,
+        "auc_roc": 0.5902
+      },
+      "feature_importance": {
+        "alcohol_status": 0.07539524137973785,
+        "family_history_liver": 0.04687424749135971,
+        "sgot": 0.03985580429434776,
+        "uric_acid": 0.037916868925094604,
+        "sgpt": 0.0357314795255661,
+        "diet": 0.03545420244336128,
+        "heart_rate": 0.03370680660009384,
+        "hba1c": 0.03227619081735611,
+        "bilirubin_total": 0.03153153136372566,
+        "alkaline_phosphatase": 0.02905202843248844,
+        "ldl_cholesterol": 0.028914878144860268,
+        "socioeconomic_score": 0.028248434886336327
+      },
+      "n_samples": 800
+    }
+  }
+}
